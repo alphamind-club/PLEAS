@@ -1,0 +1,318 @@
+{
+  "session_id": "pleas-ieee-iri2026-blinded-eval-001",
+  "created_utc": "2026-06-19T03:43:18.174671+00:00",
+  "task_records": [
+    {
+      "task_id": "T01",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T02",
+      "mapping": {
+        "GPT": "Response A",
+        "Biomni": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "Biomni",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T03",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T04",
+      "mapping": {
+        "Biomni": "Response A",
+        "BioClaw": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "BioClaw",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T05",
+      "mapping": {
+        "Biomni": "Response A",
+        "GPT": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "GPT",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T06",
+      "mapping": {
+        "Biomni": "Response A",
+        "BioClaw": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "BioClaw",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T07",
+      "mapping": {
+        "Biomni": "Response A",
+        "BioClaw": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "BioClaw",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T08",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T09",
+      "mapping": {
+        "Biomni": "Response A",
+        "GPT": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "GPT",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T10",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T11",
+      "mapping": {
+        "GPT": "Response A",
+        "BioClaw": "Response B",
+        "Biomni": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "BioClaw",
+        "Response C": "Biomni"
+      }
+    },
+    {
+      "task_id": "T12",
+      "mapping": {
+        "BioClaw": "Response A",
+        "GPT": "Response B",
+        "Biomni": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "GPT",
+        "Response C": "Biomni"
+      }
+    },
+    {
+      "task_id": "T13",
+      "mapping": {
+        "Biomni": "Response A",
+        "BioClaw": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "BioClaw",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T14",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T15",
+      "mapping": {
+        "Biomni": "Response A",
+        "BioClaw": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "BioClaw",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T16",
+      "mapping": {
+        "GPT": "Response A",
+        "Biomni": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "Biomni",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T17",
+      "mapping": {
+        "Biomni": "Response A",
+        "GPT": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "GPT",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T18",
+      "mapping": {
+        "GPT": "Response A",
+        "Biomni": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "Biomni",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T19",
+      "mapping": {
+        "GPT": "Response A",
+        "Biomni": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "Biomni",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T20",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T21",
+      "mapping": {
+        "GPT": "Response A",
+        "Biomni": "Response B",
+        "BioClaw": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "Biomni",
+        "Response C": "BioClaw"
+      }
+    },
+    {
+      "task_id": "T22",
+      "mapping": {
+        "BioClaw": "Response A",
+        "Biomni": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "BioClaw",
+        "Response B": "Biomni",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T23",
+      "mapping": {
+        "Biomni": "Response A",
+        "BioClaw": "Response B",
+        "GPT": "Response C"
+      },
+      "reverse": {
+        "Response A": "Biomni",
+        "Response B": "BioClaw",
+        "Response C": "GPT"
+      }
+    },
+    {
+      "task_id": "T24",
+      "mapping": {
+        "GPT": "Response A",
+        "BioClaw": "Response B",
+        "Biomni": "Response C"
+      },
+      "reverse": {
+        "Response A": "GPT",
+        "Response B": "BioClaw",
+        "Response C": "Biomni"
+      }
+    }
+  ]
+}

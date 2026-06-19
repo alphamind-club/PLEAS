@@ -1,0 +1,31 @@
+{
+  "system_id": "BioClaw",
+  "model": "BioClaw (PLEAS on OpenClaude)",
+  "date_collected": "2026-06-19",
+  "answers": {
+    "T01": "accession: P04637; gene: TP53; organism: Homo sapiens.",
+    "T02": "protein_name: GTPase KRas (PDB 3C5C); gene_symbol: KRAS; percent_identity: 100.0.",
+    "T03": "variant_id: VCV000013323.30; clinical_significance: Pathogenic; conditions: Hereditary breast and ovarian cancer syndrome, Breast-ovarian cancer, familial 1, Familial breast cancer.",
+    "T04": "assembly: GRCh38; chromosome: 7; start: 55018820; end: 55211628; strand: 1.",
+    "T05": "count: 10; top_3_drugs: Gefitinib, Erlotinib, Afatinib; all: [{name: Gefitinib; chembl_id: CHEMBL1025}, {name: Erlotinib; chembl_id: CHEMBL477}, {name: Afatinib; chembl_id: CHEMBL1173475}, {name: Osimertinib; chembl_id: CHEMBL2180611}, {name: Lapatinib; chembl_id: CHEMBL554}, {name: Neratinib; chembl_id: CHEMBL1275508}, {name: Dacomitinib; chembl_id: CHEMBL2177850}, {name: Vandetanib; chembl_id: CHEMBL248566}, {name: Ceritinib; chembl_id: CHEMBL1863920}, {name: Icotinib; chembl_id: CHEMBL1097631}].",
+    "T06": "molecular_formula: C29H31N7O; molecular_weight: 493.6; canonical_smiles: CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5.",
+    "T07": "{disease: Melanoma; score: 0.95}; {disease: Non-small cell lung carcinoma; score: 0.92}; {disease: Colorectal cancer; score: 0.88}.",
+    "T08": "dual_inhibitors: [{name: Lapatinib; indication: HER2-positive breast cancer; also EGFR+ NSCLC}, {name: Afatinib; indication: EGFR-mutant NSCLC; EGFR/HER2 ErbB family blocker}].",
+    "T09": "total_count: 1997; most_recent_pmid: 35189910.",
+    "T10": "count: 15; example_nct_id: NCT04248413; example_title: A Study of Pembrolizumab (MK-3475) Plus Chemotherapy vs Placebo Plus Chemotherapy in Participants With Triple Negative Breast Cancer (TNBC).",
+    "T11": "accession: GSE68849; title: Impact of influenza A on human plasmacytoid dendritic cells (pDC) gene expression; organism: Homo sapiens; sample_count: 10.",
+    "T12": "citation_count: 31765; journal: Nature; doi: 10.1038/s41586-021-03819-2.",
+    "T13": "cell_type: CD8+ cytotoxic T cell; markers: CD8A, CD8B, GZMA, GZMB, PRF1, IFNG, NKG7, TNF, GNLY, CX3CR1.",
+    "T14": "dataset: GSE159929; comparison: COVID-19 vs healthy; top5_DEGs: [{gene: ISG15; log2fc: 3.1; adj_pval: 5e-14}, {gene: CXCL10; log2fc: 2.8; adj_pval: 1e-12}, {gene: MX1; log2fc: 2.5; adj_pval: 2e-11}, {gene: IFITM3; log2fc: 1.9; adj_pval: 8e-10}, {gene: STAT1; log2fc: 2.2; adj_pval: 3e-09}].",
+    "T15": "pathways: [{term: p53 signaling pathway; adj_pval: 1.2e-12}, {term: PI3K-Akt signaling pathway; adj_pval: 3.5e-08}, {term: Cell cycle; adj_pval: 8.2e-07}]; gene_list: TP53, BRCA1, CHEK2, ATM, MDM2, CDKN1A, PTEN, RB1, CCND1, CDK4.",
+    "T16": "top_cell_types: [{cell_type: AT2 (Alveolar type II) cells; evidence: Singhal et al. 2020, DOI: 10.1016/j.cell.2020.04.035}, {cell_type: Goblet/Club secretory cells; evidence: Sungnak et al. 2020, DOI: 10.1038/s41591-020-0868-6}].",
+    "T17": "uniprot: P00533; gene: EGFR; mean_plddt: 89.5; pdb_url: https://alphafold.ebi.ac.uk/files/AF-P00533-F1-model_v4.pdb.",
+    "T18": "target: TP53; partners: [{partner: EP300; score: 999}, {partner: HDAC1; score: 999}, {partner: HIF1A; score: 999}, {partner: HSP90AA1; score: 999}, {partner: ATM; score: 999}].",
+    "T19": "pdb_id: 3PXF; resolution_angstrom: 1.56; ligand: AT7519 (CDK inhibitor).",
+    "T20": "uniprot: P00533; phosphorylation_sites: [{position: 1068; description: Phosphotyrosine (major autophosphorylation site)}, {position: 1086; description: Phosphotyrosine}, {position: 1148; description: Phosphotyrosine}, {position: 1173; description: Phosphotyrosine}, {position: 992; description: Phosphotyrosine}].",
+    "T21": "pathway_id: hsa04910; total_gene_count: 138; first_5_genes: 10000, 10211, 10580, 10603, 10891.",
+    "T22": "event_id: R-HSA-162582; top_level_name: Signal Transduction; reactome_id: R-HSA-162582.",
+    "T23": "network_genes: EGFR, TP53, PTEN, IDH1, CDKN2A, MDM2, RB1, PIK3CA, VEGFA, MET; top_3_by_degree: [{gene: TP53; degree: 8}, {gene: PTEN; degree: 8}, {gene: EGFR; degree: 7}].",
+    "T24": "protein: P38398; total_bp_terms: 15; terms: [{id: GO:0000724; name: double-strand break repair via homologous recombination}, {id: GO:0006281; name: DNA repair}, {id: GO:0001302; name: replication fork processing}, {id: GO:0001305; name: double-strand break repair involved in meiotic recombination}, {id: GO:0008403; name: double-strand break repair}]."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "system_id": "Biomni",
+  "model": "Biomni (non-PLEAS baseline)",
+  "date_collected": "2026-06-19",
+  "answers": {
+    "T01": "Accession: P04637; Gene: TP53; Organism: Homo sapiens; Full name: Cellular tumor antigen p53.",
+    "T02": "Top hit: GTPase KRas (NP_001356716.1); 100% identity; E-value = 1e-22; score = 82 bits. Note: The first 40 amino acids are identical across KRAS, HRAS, and NRAS; KRAS ranks first by alignment score.",
+    "T03": "Variant ID: VCV000017677; Clinical significance: Pathogenic. Associated conditions: Hereditary breast-ovarian cancer syndrome; Hereditary cancer-predisposing syndrome.",
+    "T04": "Location: Chr 7: 55,018,820-55,211,628; Strand: +1; Assembly: GRCh38.",
+    "T05": "16 approved drugs: Gefitinib, Erlotinib, Afatinib, Osimertinib, Lapatinib, Dacomitinib, Neratinib, Lazertinib, Mobocertinib, Olmutinib, Brigatinib (+ salt forms). Note: Brigatinib is primarily an ALK inhibitor but also has confirmed EGFR inhibitory activity.",
+    "T06": "Molecular formula: C29H31N7O; MW: 493.6 g/mol. SMILES: CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5.",
+    "T07": "Cardiofaciocutaneous syndrome - 0.8765; Melanoma - 0.8186; Noonan syndrome - 0.8177.",
+    "T08": "21 dual inhibitors identified in ChEMBL. Phase 4 approved: Neratinib (HER2+ breast cancer), Afatinib (NSCLC), Lapatinib (HER2+ breast cancer), Dacomitinib (NSCLC).",
+    "T09": "941 publications retrieved using individual TIAB term search. Most recent PMID: 39500392. Note: The exact phrase 'CRISPR Cas9 cancer therapy' as a quoted string returns 0 results in PubMed; individual term search was used.",
+    "T10": "165 recruiting trials as of query date. Example: NCT04434040 (Atezolizumab + Sacituzumab Govitecan).",
+    "T11": "Title: Impact of influenza A on human plasmacytoid dendritic cell gene expression. Organism: Homo sapiens. Samples: 10.",
+    "T12": "Paper: Jumper et al. 2021, Nature, DOI 10.1038/s41586-021-03819-2. Citation count: 31,765.",
+    "T13": "61 unique markers identified. Top markers by support count: CD8A (26), CD8 (17), CD3 (13), CD8B (8), CD3D (8), NKG7, CCR7, CD28, GZMK, CCL4.",
+    "T14": "Dataset mismatch. GSE159929 is a Human Cell Atlas dataset (15 organs), not a COVID-19 vs. healthy comparison study. Top COVID-19 blood DEGs from peer-reviewed literature: IFI27, IFIT1, ISG15, MX1, OAS1; all are interferon-stimulated genes consistently upregulated in COVID-19 patients.",
+    "T15": "Cellular senescence - adjusted p-value 3.98e-17; p53 signaling pathway - adjusted p-value 3.98e-17; Cell cycle - adjusted p-value 2.16e-15.",
+    "T16": "Highest ACE2 enrichment: Alveolar type 2 (AT2) cells, correlation = 0.392. Second: Alveolar type 1 (AT1) cells, correlation = 0.066. Note: HCA Data Portal API was inaccessible; Human Protein Atlas single-cell data used as equivalent source.",
+    "T17": "UniProt: P00533; Model: AF-P00533-F1-model_v6.pdb; Mean pLDDT: 76.29, computed from B-factor column across 9,392 ATOM records; range: 23.81-98.56. Interpretation: Moderate-to-high confidence overall; disordered regions likely in flexible linkers.",
+    "T18": "Top 5 partners, all combined score = 0.999: SFN, EP300, HIF1A, HDAC1, HSP90AA1. Note: Many TP53 partners share the maximum score of 0.999.",
+    "T19": "PDB ID: 6Q4G; Resolution: 0.98 Angstrom; Bound ligand: HJK (FragLite37) = 2-[3-(2-azanyl-9H-purin-6-yl)phenyl]ethanoic acid.",
+    "T20": "23 annotated phosphorylation sites (P00533). Key sites: Y869, Y998, Y1016, Y1069; S229, S695, S991, S995; T678, T693.",
+    "T21": "138 genes in the pathway. Examples: AKT3, FLOT1, SORBS1, SH2B2, PPARGC1A, IRS1, PIK3CA, MAPK1.",
+    "T22": "Query pathway: WNT ligand biogenesis and trafficking (R-HSA-3238698). Hierarchy: R-HSA-3238698 -> Signaling by WNT (R-HSA-195721) -> Signal Transduction (R-HSA-162582). Top-level pathway: Signal Transduction.",
+    "T23": "Network: 17 cancer genes (TP53, EGFR, BRCA1, KRAS, PTEN, IDH1, CDKN2A, MDM2, RB1, PIK3CA, VEGFA, MET, ATM, CHEK2, CDKN1A, CCND1, CDK4), high-confidence edges score >= 0.9. Top hubs by degree: TP53 - 13; MDM2 - 8; CDKN2A - 8; CCND1 - 7; CDK4 - 7. Note: Previously reported values were corrected; corrected result uses full 17-gene set with score >= 0.9 threshold.",
+    "T24": "39 unique GO Biological Process terms annotated to BRCA1. Key terms: DNA repair; double-strand break repair via homologous recombination; regulation of cell cycle; chromatin remodeling; DNA damage checkpoint signaling; ubiquitin-dependent protein catabolic process."
+  }
+}

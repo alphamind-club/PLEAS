@@ -1,0 +1,31 @@
+{
+  "system_id": "GPT",
+  "model": "gpt-5.5-thinking-extended",
+  "date_collected": "2026-06-19",
+  "answers": {
+    "T01": "Organism: Homo sapiens; UniProt accession: P04637; gene: TP53.",
+    "T02": "Protein: human KRAS / GTPase KRas; gene: KRAS; top-hit identity: 100% over the shown 41-aa fragment.",
+    "T03": "ClinVar variant ID: 17677; clinical significance: Pathogenic; condition: Hereditary breast and ovarian cancer syndrome.",
+    "T04": "EGFR ENSG00000146648 location: GRCh38, chromosome 7, start 55,018,820, end 55,211,628, strand + / forward.",
+    "T05": "EGFR target: ChEMBL CHEMBL203. Strict approved / Phase 4 / small-molecule count could not be fully verified from the live API output. Examples of approved EGFR small-molecule inhibitors: gefitinib, erlotinib, afatinib, osimertinib, dacomitinib.",
+    "T06": "Imatinib CID 5291: formula C29H31N7O; molecular weight 493.6 g/mol; canonical SMILES: CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5.",
+    "T07": "Not fully verified. Open Targets BRAF association page was found for ENSG00000157764, but the exact top-3 score table was not exposed in the browser/API response.",
+    "T08": "Confirmed EGFR/HER2 dual inhibitors: lapatinib and neratinib. Lapatinib: HER2-positive advanced/metastatic breast cancer; neratinib: HER2-positive breast cancer.",
+    "T09": "Exact PubMed count not verified. Most recent relevant 2024 PMID found: 39493894.",
+    "T10": "Exact ClinicalTrials.gov count not verified. Example active trial: NCT07190469, PQ203 in Advanced Malignant Tumors Including Triple Negative Breast Cancer.",
+    "T11": "GSE68849: title Impact of influenza A on human plasmacytoid dendritic cells (pDC) gene expression; organism Homo sapiens; 10 samples.",
+    "T12": "DOI 10.1038/s41586-021-03819-2: Highly accurate protein structure prediction with AlphaFold; journal Nature; Europe PMC citation count: 39,930.",
+    "T13": "Human CD8+ cytotoxic T-cell marker genes: CD8A, CD8B, GZMB, PRF1, NKG7, IFNG, GNLY, GZMA.",
+    "T14": "Cannot perform as written. GEO result GSE159929 is listed as a single-cell transcriptomic atlas of normal human adult organs, not a COVID-19 vs healthy-control GEO2R comparison.",
+    "T15": "Exact Enrichr adjusted p-values not verified. Expected top KEGG-type pathways: p53 signaling pathway, cell cycle, pathways in cancer / cellular senescence.",
+    "T16": "Highest ACE2-expressing human airway/lung cell types: nasal goblet/secretory cells and nasal/airway ciliated cells. Evidence source: Human Cell Atlas lung/airway scRNA-seq analysis, DOI 10.1038/s41591-020-0868-6.",
+    "T17": "EGFR AlphaFold model: UniProt P00533. Mean pLDDT: 75.94. Structure file URL: https://alphafold.ebi.ac.uk/files/AF-P00533-F1-model_v4.cif.",
+    "T18": "STRING TP53 top partners above 700: SIRT1 0.999, RPA1 0.999, MDM2 0.999, CREBBP 0.999, EP300 0.999.",
+    "T19": "Best verified CDK2 inhibitor complex found: PDB 6INL; CDK2 + CVT-313; resolution 1.74 Angstrom.",
+    "T20": "EGFR phosphorylation sites: Tyr-992, Tyr-1045, Tyr-1068, Tyr-1148, Tyr-1173.",
+    "T21": "KEGG hsa04910 insulin signaling pathway: gene count 131 proteins/genes. Example genes: INSR, IRS1, IRS2, PIK3CA, AKT1.",
+    "T22": "Reactome event R-HSA-3238698, WNT ligand biogenesis and trafficking, falls under top-level pathway Signal Transduction, stable ID R-HSA-162582.",
+    "T23": "Not fully verified. The STRING custom 10-gene network degree calculation needs the live STRING network API table; exact edge list was not retrieved.",
+    "T24": "Partial. QuickGO/UniProt confirms BRCA1 P38398 annotations. Biological Process examples: DNA repair - GO:0006281; double-strand break repair via homologous recombination - GO:0000724; mitotic G2 DNA damage checkpoint signaling - GO:0007095; related BRCA1 DNA-damage/repair terms. Exact total direct-BP count not verified."
+  }
+}

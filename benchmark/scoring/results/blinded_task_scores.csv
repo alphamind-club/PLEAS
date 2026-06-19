@@ -1,0 +1,73 @@
+task_id,category,difficulty,system_id,score_claude-opus-48,score_claude-sonnet-46,score_gemini-25-pro,majority_score,mean_score
+T01,Sequence & Variant Analysis,Easy,BioClaw,2,2,1,2,1.667
+T01,Sequence & Variant Analysis,Easy,Biomni,1,2,1,1,1.333
+T01,Sequence & Variant Analysis,Easy,GPT,2,2,2,2,2.0
+T02,Sequence & Variant Analysis,Easy,BioClaw,2,2,2,2,2.0
+T02,Sequence & Variant Analysis,Easy,Biomni,2,2,1,2,1.667
+T02,Sequence & Variant Analysis,Easy,GPT,2,2,2,2,2.0
+T03,Sequence & Variant Analysis,Medium,BioClaw,1,1,0,1,0.667
+T03,Sequence & Variant Analysis,Medium,Biomni,1,1,0,1,0.667
+T03,Sequence & Variant Analysis,Medium,GPT,1,1,0,1,0.667
+T04,Sequence & Variant Analysis,Medium,BioClaw,2,2,2,2,2.0
+T04,Sequence & Variant Analysis,Medium,Biomni,2,2,2,2,2.0
+T04,Sequence & Variant Analysis,Medium,GPT,2,2,2,2,2.0
+T05,Drug-Target Discovery,Easy,BioClaw,2,2,2,2,2.0
+T05,Drug-Target Discovery,Easy,Biomni,2,1,1,1,1.333
+T05,Drug-Target Discovery,Easy,GPT,1,1,1,1,1.0
+T06,Drug-Target Discovery,Easy,BioClaw,2,2,1,2,1.667
+T06,Drug-Target Discovery,Easy,Biomni,2,2,1,2,1.667
+T06,Drug-Target Discovery,Easy,GPT,2,2,2,2,2.0
+T07,Drug-Target Discovery,Medium,BioClaw,2,1,1,1,1.333
+T07,Drug-Target Discovery,Medium,Biomni,1,1,1,1,1.0
+T07,Drug-Target Discovery,Medium,GPT,0,0,0,0,0.0
+T08,Drug-Target Discovery,Hard,BioClaw,2,1,1,1,1.333
+T08,Drug-Target Discovery,Hard,Biomni,2,2,2,2,2.0
+T08,Drug-Target Discovery,Hard,GPT,1,1,1,1,1.0
+T09,Literature & Clinical Mining,Easy,BioClaw,1,1,1,1,1.0
+T09,Literature & Clinical Mining,Easy,Biomni,2,2,2,2,2.0
+T09,Literature & Clinical Mining,Easy,GPT,1,1,1,1,1.0
+T10,Literature & Clinical Mining,Easy,BioClaw,1,1,0,1,0.667
+T10,Literature & Clinical Mining,Easy,Biomni,2,2,2,2,2.0
+T10,Literature & Clinical Mining,Easy,GPT,1,1,1,1,1.0
+T11,Literature & Clinical Mining,Medium,BioClaw,2,2,2,2,2.0
+T11,Literature & Clinical Mining,Medium,Biomni,2,2,2,2,2.0
+T11,Literature & Clinical Mining,Medium,GPT,2,2,2,2,2.0
+T12,Literature & Clinical Mining,Medium,BioClaw,2,2,2,2,2.0
+T12,Literature & Clinical Mining,Medium,Biomni,2,1,2,2,1.667
+T12,Literature & Clinical Mining,Medium,GPT,2,2,2,2,2.0
+T13,Transcriptomics & Single-cell,Easy,BioClaw,2,1,1,1,1.333
+T13,Transcriptomics & Single-cell,Easy,Biomni,2,1,1,1,1.333
+T13,Transcriptomics & Single-cell,Easy,GPT,1,1,1,1,1.0
+T14,Transcriptomics & Single-cell,Medium,BioClaw,2,2,2,2,2.0
+T14,Transcriptomics & Single-cell,Medium,Biomni,1,1,1,1,1.0
+T14,Transcriptomics & Single-cell,Medium,GPT,0,0,2,0,0.667
+T15,Transcriptomics & Single-cell,Medium,BioClaw,2,2,2,2,2.0
+T15,Transcriptomics & Single-cell,Medium,Biomni,2,2,2,2,2.0
+T15,Transcriptomics & Single-cell,Medium,GPT,1,1,1,1,1.0
+T16,Transcriptomics & Single-cell,Hard,BioClaw,2,2,2,2,2.0
+T16,Transcriptomics & Single-cell,Hard,Biomni,2,2,1,2,1.667
+T16,Transcriptomics & Single-cell,Hard,GPT,0,0,0,0,0.0
+T17,Structural & Protein Biology,Easy,BioClaw,2,2,2,2,2.0
+T17,Structural & Protein Biology,Easy,Biomni,2,1,1,1,1.333
+T17,Structural & Protein Biology,Easy,GPT,2,2,2,2,2.0
+T18,Structural & Protein Biology,Easy,BioClaw,2,0,2,2,1.333
+T18,Structural & Protein Biology,Easy,Biomni,2,0,1,2,1.0
+T18,Structural & Protein Biology,Easy,GPT,2,0,2,2,1.333
+T19,Structural & Protein Biology,Medium,BioClaw,2,2,2,2,2.0
+T19,Structural & Protein Biology,Medium,Biomni,2,2,2,2,2.0
+T19,Structural & Protein Biology,Medium,GPT,2,1,2,2,1.667
+T20,Structural & Protein Biology,Hard,BioClaw,2,2,2,2,2.0
+T20,Structural & Protein Biology,Hard,Biomni,2,0,2,2,1.333
+T20,Structural & Protein Biology,Hard,GPT,2,1,1,1,1.333
+T21,Pathway & Systems Biology,Easy,BioClaw,2,1,2,2,1.667
+T21,Pathway & Systems Biology,Easy,Biomni,2,2,2,2,2.0
+T21,Pathway & Systems Biology,Easy,GPT,2,2,2,2,2.0
+T22,Pathway & Systems Biology,Easy,BioClaw,2,2,2,2,2.0
+T22,Pathway & Systems Biology,Easy,Biomni,2,2,2,2,2.0
+T22,Pathway & Systems Biology,Easy,GPT,2,1,2,2,1.667
+T23,Pathway & Systems Biology,Medium,BioClaw,2,2,2,2,2.0
+T23,Pathway & Systems Biology,Medium,Biomni,1,1,1,1,1.0
+T23,Pathway & Systems Biology,Medium,GPT,0,0,0,0,0.0
+T24,Pathway & Systems Biology,Hard,BioClaw,2,1,2,2,1.667
+T24,Pathway & Systems Biology,Hard,Biomni,1,1,1,1,1.0
+T24,Pathway & Systems Biology,Hard,GPT,1,1,1,1,1.0

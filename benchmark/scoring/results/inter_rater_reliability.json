@@ -1,0 +1,11 @@
+{
+  "fleiss_kappa": 0.5319,
+  "krippendorff_alpha": 0.1128,
+  "num_judges": 3,
+  "num_task_system_pairs": 72,
+  "judge_ids": [
+    "claude-opus-48",
+    "claude-sonnet-46",
+    "gemini-25-pro"
+  ]
+}

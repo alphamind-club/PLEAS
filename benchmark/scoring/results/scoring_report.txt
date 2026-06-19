@@ -1,0 +1,59 @@
+========================================================================
+BLINDED MULTI-JUDGE SCORING REPORT
+PLEAS 24-Task Biomedical Scientific Workflow Benchmark
+========================================================================
+
+INTER-RATER RELIABILITY
+----------------------------------------
+  Judges:              3
+  Judge IDs:           claude-opus-48, claude-sonnet-46, gemini-25-pro
+  Fleiss' kappa:       0.5319
+  Krippendorff alpha:  0.1128
+  Scored pairs:        72
+
+SYSTEM SUMMARY (majority-vote scores)
+------------------------------------------------------------------------
+System                     Score       %    C   P   F
+------------------------------------------------------------------------
+BioClaw                    42/48   87.5%   18   6   0
+Biomni                     39/48   81.2%   15   9   0
+GPT                        31/48   64.6%   11   9   4
+
+
+PER-CATEGORY BREAKDOWN (majority-vote)
+------------------------------------------------------------------------
+
+  Sequence & Variant Analysis:
+    BioClaw                   7/8
+    Biomni                    6/8
+    GPT                       7/8
+
+  Drug-Target Discovery:
+    BioClaw                   6/8
+    Biomni                    6/8
+    GPT                       4/8
+
+  Literature & Clinical Mining:
+    BioClaw                   6/8
+    Biomni                    8/8
+    GPT                       6/8
+
+  Transcriptomics & Single-cell:
+    BioClaw                   7/8
+    Biomni                    6/8
+    GPT                       2/8
+
+  Structural & Protein Biology:
+    BioClaw                   8/8
+    Biomni                    7/8
+    GPT                       7/8
+
+  Pathway & Systems Biology:
+    BioClaw                   8/8
+    Biomni                    6/8
+    GPT                       5/8
+
+
+========================================================================
+END OF REPORT
+========================================================================
