@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>BioPLEASE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <div class="app-shell">
+      <aside class="sidebar glass-panel">
+        <div class="brand">
+          <div class="brand-mark">BP</div>
+          <div>
+            <p class="eyebrow">Local Biomedical Agent</p>
+            <h1>BioPLEASE</h1>
+          </div>
+        </div>
+
+        <section class="sidebar-block workspace-block">
+          <div class="section-header">
+            <span>Workspace</span>
+          </div>
+          <label class="field-label">Working folder</label>
+          <div class="path-row">
+            <div
+              id="project-root"
+              class="path-display"
+              title="No working folder selected"
+            >
+              No working folder selected
+            </div>
+            <button id="open-project" class="button primary" type="button">Open Folder</button>
+          </div>
+          <div class="path-actions">
+            <button id="pick-folder" class="button ghost" type="button">Pick Folder</button>
+            <button id="refresh-project" class="button ghost" type="button">Refresh</button>
+            <button id="doctor" class="button ghost" type="button">Doctor</button>
+          </div>
+        </section>
+
+        <section class="sidebar-block recent-block grow">
+          <div class="section-header">
+            <span>Recent Projects</span>
+          </div>
+          <div id="recent-projects" class="recent-list empty-state">
+            Open a local folder to start tracking projects here.
+          </div>
+        </section>
+
+        <section class="sidebar-block sessions-block">
+          <div class="section-header">
+            <span>Sessions</span>
+          </div>
+          <div id="session-list" class="session-list empty-state">
+            No session history yet.
+          </div>
+        </section>
+      </aside>
+
+      <main class="main-panel glass-panel">
+        <header class="main-header">
+          <div>
+            <p id="project-title" class="eyebrow">No project selected</p>
+            <h2 id="project-question">Open a folder to start a BioPLEASE run.</h2>
+          </div>
+          <div class="header-actions">
+            <div id="run-indicator" class="status-pill idle">Idle</div>
+            <button id="cancel-run" class="button subtle" type="button" disabled>Cancel Run</button>
+          </div>
+        </header>
+
+        <section id="transcript" class="transcript">
+          <div class="message message-system">
+            <div class="message-meta">BioPLEASE</div>
+            <div class="message-body">
+              This local app runs OpenClaude directly inside your chosen folder, keeps runtime state in
+              <code>.bioplease/</code>, and shows the live plan, progress, summary, and outputs as the agent works.
+            </div>
+          </div>
+        </section>
+
+        <form id="composer" class="composer">
+          <div class="composer-topline">
+            <span id="current-root-label">No working folder selected</span>
+            <span id="latest-summary-chip">No summary yet</span>
+          </div>
+          <textarea
+            id="goal-input"
+            class="composer-input"
+            placeholder="Describe the next biomedical coding task..."
+          ></textarea>
+          <div class="composer-actions">
+            <label class="inline-field">
+              <span>Turns</span>
+              <input id="max-turns" class="mini-input" type="number" value="45" min="10" max="120" />
+            </label>
+            <button id="start-run" class="button primary" type="submit">Run BioPLEASE</button>
+          </div>
+        </form>
+      </main>
+
+      <aside class="rail glass-panel">
+        <section class="rail-block plan-block">
+          <div class="section-header">
+            <span>Plan</span>
+            <button id="save-plan" class="button ghost tiny" type="button">Save</button>
+          </div>
+          <textarea id="plan-editor" class="plan-editor" spellcheck="false"></textarea>
+        </section>
+
+        <section class="rail-block compact progress-block">
+          <div class="section-header">
+            <span>Progress</span>
+          </div>
+          <div id="phase-progress" class="phase-progress empty-state">No progress yet.</div>
+        </section>
+
+        <section class="rail-block compact summary-block">
+          <div class="section-header">
+            <span>Recent Summary</span>
+          </div>
+          <div id="recent-summary" class="summary-card empty-state">No summary yet.</div>
+        </section>
+
+        <section class="rail-block compact outputs-block">
+          <div class="section-header">
+            <span>Outputs</span>
+          </div>
+          <div id="outputs-list" class="outputs-list empty-state">No artifacts yet.</div>
+        </section>
+
+        <section class="rail-block compact tools-block">
+          <div class="section-header">
+            <span>Enabled Tools</span>
+          </div>
+          <div id="tools-list" class="tools-list empty-state">BioContext tools will appear here.</div>
+        </section>
+      </aside>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

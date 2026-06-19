@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use PLEAS in your research, please cite it as below."
+title: "PLEAS: Plan, Learn, Execute, Assess, Share"
+type: software
+authors:
+  - family-names: Pan
+    given-names: Thomas
+    affiliation: "Alpha Mind Club, LLC"
+    email: tpan.6048@gmail.com
+  - family-names: Chen
+    given-names: "Jake Y."
+    affiliation: "University of Alabama at Birmingham"
+    email: jakechen@uab.edu
+license: Apache-2.0
+repository-code: "https://github.com/alphamind-club/PLEAS"
+keywords:
+  - artificial intelligence
+  - scientific workflow
+  - AI agents
+  - reusable artifacts
+  - context management
+preferred-citation:
+  type: conference-paper
+  title: "Scientific AI Agents Must Learn and Share"
+  authors:
+    - family-names: Pan
+      given-names: Thomas
+    - family-names: Chen
+      given-names: "Jake Y."
+  collection-title: "Proceedings of the IEEE International Conference on Information Reuse and Integration (IRI)"
+  year: 2026

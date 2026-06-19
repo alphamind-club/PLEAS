@@ -1,0 +1,4 @@
+claim_id,system,model,benchmark,score_type,numerator,denominator,percent,complete_tasks,partial_tasks,failed_tasks,source,notes
+C4,BioClaw,uploaded JSON output (model not specified),BioClaw 24-task benchmark,rubric_points,42,48,87.5,20,2,2,fresh gpt-5.5-thinking-extended rubric grading,"Fresh gpt-5.5-thinking-extended grading before T11 correction. T11 requires regrading against corrected NCBI GEO metadata."
+C4,Biomni,consolidated answer (model not specified),BioClaw 24-task benchmark,rubric_points,38,48,79.2,15,8,1,fresh gpt-5.5-thinking-extended rubric grading,"Fresh gpt-5.5-thinking-extended grading before T11 correction. Raw API logs not included."
+C4,ChatGPT,gpt-5.5-thinking-extended,BioClaw 24-task benchmark,rubric_points,28,48,58.3,11,6,7,fresh gpt-5.5-thinking-extended rubric grading,"Fresh gpt-5.5-thinking-extended grading before T11 correction."

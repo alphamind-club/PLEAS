@@ -1,0 +1,82 @@
+====================================================================
+C13  T11 GEO to Europe PMC Fallback Demo
+====================================================================
+
+Target  : GSE68849
+Task    : T11 (BioClaw 24-task benchmark)
+
+--------------------------------------------------------------------
+SECTION A  Live API Calls
+
+STEP A1  Primary: NCBI GEO ESearch/ESummary
+  URL: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&term=GSE68849&retmode=json
+
+  HTTP 200 OK  (0.15s)
+  OK  GEO data:
+     dataset       : GDS6063
+     series        : GSE68849
+     title         : Influenza A effect on plasmacytoid dendritic cells
+     series_title  : Impact of influenza A on human plasmacytoid dendritic cells (pDC) gene expression
+     organism      : Homo sapiens
+     n_samples     : 10
+     type          : Expression profiling by array
+     platform      : Illumina HumanHT-12 V4.0 expression beadchip
+     pubmed_id     : 26826244
+
+STEP A2  Fallback: Europe PMC
+  URL: https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=GSE68849&resultType=core&format=json&pageSize=1
+
+  [SKIPPED - primary succeeded]
+
+STEP A3  Live outcome:
+  PRIMARY SUCCESS
+
+--------------------------------------------------------------------
+SECTION B  Simulated Fallback  (verified GEO data, replayed offline)
+
+Scenario: GEO returns HTTP 408 x3. F4 escalates to Europe PMC.
+
+[Sim] STEP 1  GEO ESummary:
+  Response: HTTP 408 x3  max_retries exhausted
+  Escalating to fallback_sources[0]='europe_pmc'
+
+[Sim] STEP 2  Europe PMC  200 OK  0.34s
+  PMID 26826244 linked to GSE68849
+  Agent re-queries GEO via accession in paper abstract
+
+[Sim] STEP 3  Direct GEO lookup  SUCCESS:
+  accession     : GSE68849
+  dataset       : GDS6063
+  title         : Influenza A effect on plasmacytoid dendritic cells
+  series_title  : Impact of influenza A on human plasmacytoid dendritic cells (pDC) gene expression
+  organism      : Homo sapiens
+  n_samples     : 10
+  type          : Expression profiling by array
+  platform      : GPL10558 / Illumina HumanHT-12 V4.0 expression beadchip
+  pubmed_id     : 26826244
+  submitted     : 2016-02-01
+  verified      : NCBI GEO DataSets GDS6063 / ESummary, retrieved 2026-05-13
+
+  SIMULATED FALLBACK SUCCESS  correct answer recovered via F4.
+
+--------------------------------------------------------------------
+SECTION C  F4 Code Path  (bioplease/agent/please.py)
+
+  for attempt in range(self.max_retries + 1):
+      try:
+          result = self._call_tool(step)  # primary source
+          break
+      except ToolCallError:
+          if attempt < self.max_retries:
+              time.sleep(2 ** attempt)        # backoff: 1s, 2s, 4s
+          elif self.fallback_sources:
+              result = self._call_fallback(step)  # Europe PMC etc.
+          else:
+              state.errors.append(str(e))
+              state.phase = 'ASSESS'           # re-route for LLM retry
+              return state
+  state.executions.append(ExecutionRecord(...))  # always recorded (F4)
+
+====================================================================
+C13 complete.
+====================================================================

@@ -1,0 +1,659 @@
+================================================================================
+BIOCLAW 24-TASK BENCHMARK
+IEEE IRI 2026 — C4 BioClaw / Biomni / ChatGPT Comparison Suite
+Systems compared: BioClaw, Biomni, ChatGPT
+================================================================================
+
+SCORING RUBRIC (applies to every task)
+--------------------------------------------------------------------------------
+SCORE 2 — Complete
+  Correct answer retrieved, correct database/tool used, reasoning stated.
+SCORE 1 — Partial
+  Correct answer but wrong source, OR correct source but minor factual error,
+  OR correct approach but incomplete output (e.g. missing one of two required items).
+SCORE 0 — Failed
+  Wrong answer, no answer, hallucinated data, or tool not called.
+================================================================================
+
+SCORING PROVENANCE NOTE
+--------------------------------------------------------------------------------
+The recorded C4 score sheets were graded by a fresh instance of
+gpt-5.5-thinking-extended using this rubric. They are not author-scored results.
+================================================================================
+
+
+CATEGORY A: SEQUENCE & VARIANT ANALYSIS (T01–T04)
+================================================================================
+
+TASK T01
+--------------------------------------------------------------------------------
+ID:       BC-T01
+Category: Sequence & Variant Analysis
+Difficulty: Easy
+
+Task:
+Using the UniProt database, retrieve the canonical UniProt accession number and
+gene name for human TP53 protein. State the organism, accession, and gene name.
+
+Expected Output:
+  Organism:  Homo sapiens
+  Accession: P04637
+  Gene name: TP53
+
+Scoring:
+  2 — P04637 returned, gene name TP53, organism Homo sapiens, UniProt cited
+  1 — Correct accession but wrong gene name or organism, OR correct answer but
+      source not specified or hallucinated
+  0 — Wrong accession or no answer
+
+Hint for agent:
+  Query UniProt REST API: https://rest.uniprot.org/uniprotkb/search?query=gene:TP53+AND+organism_id:9606&fields=accession,gene_names
+
+================================================================================
+
+TASK T02
+--------------------------------------------------------------------------------
+ID:       BC-T02
+Category: Sequence & Variant Analysis
+Difficulty: Easy
+
+Task:
+The following protein sequence is a fragment of a human protein. Use NCBI BLAST
+(blastp) to identify the protein and return: (1) the protein name, (2) the gene
+symbol, and (3) the percent identity of the top hit.
+
+Sequence (FASTA):
+>query
+MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSY
+
+Expected Output:
+  Protein: GTPase KRas (or KRAS proto-oncogene GTPase)
+  Gene:    KRAS
+  Identity: ≥95% (exact value depends on BLAST run; accept 95–100%)
+
+Scoring:
+  2 — KRAS identified, identity ≥ 95%, BLAST used
+  1 — Correct protein but identity not reported, OR identity reported but gene
+      symbol missing
+  0 — Wrong protein or no BLAST call made
+
+================================================================================
+
+TASK T03
+--------------------------------------------------------------------------------
+ID:       BC-T03
+Category: Sequence & Variant Analysis
+Difficulty: Medium
+
+Task:
+Query the ClinVar database to find the clinical significance classification
+for the BRCA1 variant NM_007294.4(BRCA1):c.5266dupC (also known as 5382insC).
+Return the variant ID, clinical significance, and the condition(s) listed.
+
+Expected Output:
+  Variant ID:            17661 (ClinVar accession VCV000017661)
+  Clinical significance: Pathogenic
+  Condition:             Hereditary breast and ovarian cancer syndrome
+
+Scoring:
+  2 — Pathogenic returned, ClinVar accession or variant ID cited, condition named
+  1 — Pathogenic returned but no variant ID or condition listed
+  0 — Wrong classification or ClinVar not queried
+
+================================================================================
+
+TASK T04
+--------------------------------------------------------------------------------
+ID:       BC-T04
+Category: Sequence & Variant Analysis
+Difficulty: Medium
+
+Task:
+Use Ensembl REST API to retrieve the chromosome location (chromosome, start,
+end, strand) of the human gene EGFR (Ensembl gene ID: ENSG00000146648).
+
+Expected Output:
+  Chromosome: 7
+  Start:      55,019,017
+  End:        55,211,628
+  Strand:     +1 (forward)
+  Assembly:   GRCh38
+
+Scoring:
+  2 — Chromosome 7, correct start/end within ±1000 bp, Ensembl used
+  1 — Chromosome correct but coordinates significantly wrong, OR coordinates
+      correct but assembly not specified
+  0 — Wrong chromosome or no API call
+
+================================================================================
+
+
+CATEGORY B: DRUG-TARGET DISCOVERY (T05–T08)
+================================================================================
+
+TASK T05
+--------------------------------------------------------------------------------
+ID:       BC-T05
+Category: Drug-Target Discovery
+Difficulty: Easy
+
+Task:
+Query the ChEMBL database to find how many approved (Phase 4) small-molecule
+drugs target the protein EGFR (ChEMBL target ID: CHEMBL203). Report the count
+and name at least 3 of those drugs.
+
+Expected Output:
+  Count: ≥ 4 approved drugs targeting EGFR
+  Examples: Gefitinib, Erlotinib, Osimertinib, Afatinib, Lapatinib
+
+Scoring:
+  2 — Count ≥ 4, at least 3 correct drug names, ChEMBL cited
+  1 — Count correct but fewer than 3 drug names, OR 3+ drugs named without
+      citing ChEMBL or using a hallucinated count
+  0 — Wrong count (< 2) or no drugs named
+
+================================================================================
+
+TASK T06
+--------------------------------------------------------------------------------
+ID:       BC-T06
+Category: Drug-Target Discovery
+Difficulty: Easy
+
+Task:
+Use the PubChem database to retrieve the molecular formula, molecular weight,
+and canonical SMILES for Imatinib (CID: 5291).
+
+Expected Output:
+  Molecular formula: C29H31N7O
+  Molecular weight:  493.6 g/mol  (accept 493.0–494.0)
+  SMILES:            Cn1cc(nc1-c1ccc(cc1)NC(=O)c1ccc(cc1)CN1CCN(CC1)C)-c1cccnc1
+                     (or equivalent canonical form)
+
+Scoring:
+  2 — Formula C29H31N7O, weight 493–494, SMILES returned, PubChem cited
+  1 — Two of three properties correct
+  0 — All wrong or no PubChem call
+
+================================================================================
+
+TASK T07
+--------------------------------------------------------------------------------
+ID:       BC-T07
+Category: Drug-Target Discovery
+Difficulty: Medium
+
+Task:
+Using the Open Targets Platform API, retrieve the top 3 disease associations
+for the target BRAF (Ensembl ID: ENSG00000157764), ranked by overall
+association score. Report the disease name and score for each.
+
+Expected Output (approximate — scores change with data release):
+  1. Melanoma            — score > 0.85
+  2. Colorectal cancer   — score > 0.70
+  3. Thyroid carcinoma   — score > 0.65
+  (Accept any top-3 where melanoma is #1 and all three are known BRAF cancers)
+
+Scoring:
+  2 — Melanoma in top 3 (ideally #1), 3 diseases listed with scores, API cited
+  1 — Melanoma present but ranked incorrectly, or fewer than 3 diseases, or
+      scores missing
+  0 — Melanoma absent or Open Targets not used
+
+================================================================================
+
+TASK T08
+--------------------------------------------------------------------------------
+ID:       BC-T08
+Category: Drug-Target Discovery
+Difficulty: Hard
+
+Task:
+Query the DrugBank or ChEMBL database to find all drugs that target both
+EGFR and HER2 (ERBB2) simultaneously (dual inhibitors). List at least
+2 confirmed dual inhibitors and their indication.
+
+Expected Output:
+  Lapatinib   — indicated for HER2+ breast cancer (EGFR+HER2 dual inhibitor)
+  Neratinib   — indicated for HER2+ breast cancer
+  Afatinib    — indicated for NSCLC (EGFR/HER2/HER4 inhibitor)
+  (Accept any 2 of these 3)
+
+Scoring:
+  2 — 2+ correct dual inhibitors with correct indications, source cited
+  1 — 2 correct names but indications wrong or missing
+  0 — Fewer than 2 correct or no database used
+
+================================================================================
+
+
+CATEGORY C: LITERATURE & CLINICAL MINING (T09–T12)
+================================================================================
+
+TASK T09
+--------------------------------------------------------------------------------
+ID:       BC-T09
+Category: Literature & Clinical Mining
+Difficulty: Easy
+
+Task:
+Use the PubMed API (NCBI E-utilities) to find the total number of publications
+returned for the search query: "CRISPR Cas9 cancer therapy"[Title/Abstract]
+published between 2020 and 2024. Report the count and the PMID of the most
+recent article returned.
+
+Expected Output:
+  Count: > 500 (exact count varies by query date; accept any count > 300)
+  Most recent PMID: any valid PMID published 2023–2024
+
+Scoring:
+  2 — Count > 300, valid PMID from 2023–2024 returned, PubMed E-utilities used
+  1 — Count plausible but PMID missing or not verified as recent, OR correct
+      PMID but count not reported
+  0 — Count < 100 (clearly wrong) or PubMed not used
+
+================================================================================
+
+TASK T10
+--------------------------------------------------------------------------------
+ID:       BC-T10
+Category: Literature & Clinical Mining
+Difficulty: Easy
+
+Task:
+Query ClinicalTrials.gov API to find the number of currently RECRUITING
+clinical trials for "triple negative breast cancer" in the United States.
+Report the count and the NCT ID + title of one active trial.
+
+Expected Output:
+  Count:   > 50 recruiting trials (accept any count > 30)
+  Example: Any valid NCT ID for a recruiting TNBC trial in the US
+
+Scoring:
+  2 — Count > 30, valid NCT ID provided, ClinicalTrials.gov API used
+  1 — Count plausible but no NCT ID, OR NCT ID given but count missing
+  0 — Count < 10 or source hallucinated
+
+================================================================================
+
+TASK T11
+--------------------------------------------------------------------------------
+ID:       BC-T11
+Category: Literature & Clinical Mining
+Difficulty: Medium
+
+Task:
+Use the NCBI GEO database to retrieve the title, organism, and number of samples
+for dataset GSE68849.
+
+Expected Output:
+  Dataset:  GDS6063 / Series GSE68849
+  Title:    Influenza A effect on plasmacytoid dendritic cells
+            (series title: Impact of influenza A on human plasmacytoid
+            dendritic cells (pDC) gene expression)
+  Organism: Homo sapiens
+  Samples:  10 samples
+  Type:     Expression profiling by array
+
+Scoring:
+  2 — Correct title (partial match OK), organism Homo sapiens, sample count 10,
+      GEO cited
+  1 — Title or organism correct but sample count wrong or missing
+  0 — Wrong dataset or GEO not used
+
+Note: This is the fallback-robustness task (T11). If NCBI GEO returns HTTP 408/503,
+      fall back to Europe PMC to retrieve the associated publication and then
+      re-query GEO or cite the linked GEO accession. Verified source:
+      NCBI GEO DataSets GDS6063 / GSE68849.
+
+IMPORTANT C13 RECONCILIATION NOTE:
+The C13 supporting artifact (C13_pubchem_fallback/geo_pubchem_fallback_demo.py)
+has been updated to use the same verified NCBI GEO metadata above. Older draft
+rubrics incorrectly listed pancreatic islets / human + mouse / 26 samples for
+GSE68849.
+
+================================================================================
+
+TASK T12
+--------------------------------------------------------------------------------
+ID:       BC-T12
+Category: Literature & Clinical Mining
+Difficulty: Medium
+
+Task:
+Using the Europe PMC API, find the total citation count for the paper with DOI:
+10.1038/s41586-021-03819-2 (AlphaFold2 paper). Report the citation count and
+the journal name.
+
+Expected Output:
+  DOI:      10.1038/s41586-021-03819-2
+  Journal:  Nature
+  Citations: > 10,000 (as of 2025; accept any count > 5,000)
+
+Scoring:
+  2 — Citation count > 5,000, journal = Nature, Europe PMC used
+  1 — Citation count plausible but journal wrong, or journal correct but count
+      not retrieved from API
+  0 — Citation count < 1,000 or source not used
+
+================================================================================
+
+
+CATEGORY D: TRANSCRIPTOMICS & SINGLE-CELL (T13–T16)
+================================================================================
+
+TASK T13
+--------------------------------------------------------------------------------
+ID:       BC-T13
+Category: Transcriptomics & Single-cell
+Difficulty: Easy
+
+Task:
+Query the CellMarker 2.0 database (or equivalent) to retrieve the canonical
+marker genes for human CD8+ cytotoxic T cells. List at least 5 marker genes.
+
+Expected Output (any 5 of these):
+  CD8A, CD8B, GZMB, PRF1, IFNG, TBX21, EOMES, NKG7, GNLY, KLRG1, LAG3, PDCD1
+
+Scoring:
+  2 — 5+ correct markers listed, CD8A or CD8B included, source cited
+  1 — 3–4 correct markers with CD8A/B included
+  0 — Fewer than 3 correct or CD8A/B absent
+
+================================================================================
+
+TASK T14
+--------------------------------------------------------------------------------
+ID:       BC-T14
+Category: Transcriptomics & Single-cell
+Difficulty: Medium
+
+Task:
+Using the GEO2R tool or NCBI GEO API, retrieve the top 5 differentially
+expressed genes (by adjusted p-value) from GEO dataset GSE159929, comparing
+COVID-19 patients vs healthy controls. Report gene symbol and log2 fold change.
+
+Expected Output (approximate):
+  Top DEGs include: IFI27, ISG15, IFI44L, RSAD2, MX1
+  (Accept any 5 interferon-stimulated genes with |log2FC| > 1)
+
+Scoring:
+  2 — 5 genes listed, ≥ 3 are known interferon-stimulated genes, FC values given
+  1 — 5 genes listed but < 3 are ISGs, or FC values missing
+  0 — Genes are not biologically plausible for COVID-19 vs healthy
+
+================================================================================
+
+TASK T15
+--------------------------------------------------------------------------------
+ID:       BC-T15
+Category: Transcriptomics & Single-cell
+Difficulty: Medium
+
+Task:
+Given the following gene list, use the Enrichr API or KEGG REST API to identify
+the top 3 enriched KEGG pathways. Report pathway name and adjusted p-value.
+
+Gene list: TP53, BRCA1, CHEK2, ATM, MDM2, CDKN1A, PTEN, RB1, CCND1, CDK4
+
+Expected Output (top 3 should include):
+  p53 signaling pathway         — adjusted p < 0.001
+  Cell cycle                    — adjusted p < 0.001
+  Pathways in cancer             — adjusted p < 0.01
+  (Accept any ordering where p53/cell-cycle appear in top 3)
+
+Scoring:
+  2 — p53 signaling and Cell cycle both in top 3, p-values reported, API used
+  1 — One of the two expected pathways in top 3, or both present but p-values
+      missing
+  0 — Neither expected pathway in top 3
+
+================================================================================
+
+TASK T16
+--------------------------------------------------------------------------------
+ID:       BC-T16
+Category: Transcriptomics & Single-cell
+Difficulty: Hard
+
+Task:
+Use the Human Cell Atlas (HCA) Data Portal API or a published scRNA-seq resource
+to identify which cell types in the human lung express ACE2 at the highest level.
+Report the top 2 cell types and the evidence source (dataset or publication DOI).
+
+Expected Output:
+  Top cell types: AT2 cells (alveolar type 2), club cells / ciliated cells
+  Key paper: Ziegler et al. Cell 2020 or equivalent (DOI: 10.1016/j.cell.2020.04.035)
+
+Scoring:
+  2 — AT2 cells identified as top, second cell type biologically plausible,
+      DOI or dataset cited
+  1 — AT2 cells identified but second cell type missing or wrong, or no citation
+  0 — AT2 cells not identified
+
+================================================================================
+
+
+CATEGORY E: STRUCTURAL & PROTEIN BIOLOGY (T17–T20)
+================================================================================
+
+TASK T17
+--------------------------------------------------------------------------------
+ID:       BC-T17
+Category: Structural & Protein Biology
+Difficulty: Easy
+
+Task:
+Use the AlphaFold DB API to retrieve the predicted structure confidence (mean
+pLDDT score) for human EGFR protein (UniProt: P00533). Report the mean pLDDT
+and the URL of the structure file.
+
+Expected Output:
+  UniProt:    P00533
+  Mean pLDDT: ~80–92 (accept 70–95 as plausible range)
+  File URL:   https://alphafold.ebi.ac.uk/files/AF-P00533-F1-model_v4.cif
+              (or equivalent versioned URL)
+
+Scoring:
+  2 — pLDDT value in range 70–95, correct UniProt ID, AlphaFold DB URL returned
+  1 — pLDDT value given but URL missing, or URL correct but pLDDT not computed
+  0 — Wrong protein or AlphaFold DB not used
+
+================================================================================
+
+TASK T18
+--------------------------------------------------------------------------------
+ID:       BC-T18
+Category: Structural & Protein Biology
+Difficulty: Easy
+
+Task:
+Query the STRING database API to retrieve the top 5 interaction partners of
+human TP53 (STRING ID: 9606.ENSP00000269305) with a combined score > 700.
+Report the partner gene name and score.
+
+Expected Output (any 5 of):
+  MDM2   — score > 900
+  MDM4   — score > 800
+  CDKN1A — score > 800
+  ATM    — score > 800
+  PTEN   — score > 700
+  CHEK2  — score > 700
+
+Scoring:
+  2 — 5 partners listed, all scores > 700, all are known TP53 interactors, STRING cited
+  1 — 3–4 correct partners, or 5 partners but 1–2 are not known interactors
+  0 — Fewer than 3 correct or STRING not used
+
+================================================================================
+
+TASK T19
+--------------------------------------------------------------------------------
+ID:       BC-T19
+Category: Structural & Protein Biology
+Difficulty: Medium
+
+Task:
+Use the RCSB PDB API to retrieve the PDB structure with the highest resolution
+for human CDK2 kinase in complex with a small molecule inhibitor. Report:
+(1) the PDB ID, (2) resolution in Ångströms, and (3) the ligand name.
+
+Expected Output:
+  PDB ID:     Any PDB entry for CDK2 with resolution < 1.5 Å
+  Resolution: < 1.5 Å (many CDK2 structures exist at 1.2–1.4 Å)
+  Ligand:     Any named small molecule (not water)
+  Example:    1AQ1 at 1.49 Å with ligand ATP, or equivalent
+
+Scoring:
+  2 — Valid PDB ID for CDK2, resolution < 2.0 Å, ligand named, RCSB PDB API used
+  1 — Valid PDB ID for CDK2 but resolution > 2.0 Å or ligand missing
+  0 — Wrong protein or no PDB API call
+
+================================================================================
+
+TASK T20
+--------------------------------------------------------------------------------
+ID:       BC-T20
+Category: Structural & Protein Biology
+Difficulty: Hard
+
+Task:
+Use UniProt or PhosphoSitePlus to retrieve all confirmed phosphorylation sites
+on human EGFR (UniProt: P00533). Report at least 5 phosphorylation sites
+(residue + position) and the kinase responsible (if annotated).
+
+Expected Output (any 5 of):
+  Y992  — phosphorylated (autophosphorylation)
+  Y1045 — phosphorylated (CBL binding site)
+  Y1068 — phosphorylated (GRB2 binding)
+  Y1086 — phosphorylated
+  Y1148 — phosphorylated
+  Y1173 — phosphorylated (major autophosphorylation site)
+
+Scoring:
+  2 — 5+ correct phosphorylation sites, positions match known EGFR sites,
+      source cited
+  1 — 3–4 correct sites, or 5 sites but positions are off by > 5 residues
+  0 — Fewer than 3 correct sites or source hallucinated
+
+================================================================================
+
+
+CATEGORY F: PATHWAY & SYSTEMS BIOLOGY (T21–T24)
+================================================================================
+
+TASK T21
+--------------------------------------------------------------------------------
+ID:       BC-T21
+Category: Pathway & Systems Biology
+Difficulty: Easy
+
+Task:
+Use the KEGG REST API to retrieve all genes in the human insulin signaling
+pathway (KEGG pathway ID: hsa04910). Report the total gene count and list
+5 genes in the pathway.
+
+Expected Output:
+  Pathway: hsa04910 — Insulin signaling pathway
+  Gene count: ~137 genes (accept 100–160)
+  Examples (any 5): INSR, IRS1, IRS2, PIK3CA, AKT1, FOXO1, GSK3B, GLUT4 (SLC2A4)
+
+Scoring:
+  2 — Gene count 100–160, 5 correct pathway members, KEGG API used
+  1 — Gene count correct but < 5 members, or 5 members but count wrong
+  0 — Gene count < 50 or genes not from this pathway
+
+================================================================================
+
+TASK T22
+--------------------------------------------------------------------------------
+ID:       BC-T22
+Category: Pathway & Systems Biology
+Difficulty: Easy
+
+Task:
+Query the Reactome API to find the top-level pathway that contains the event
+"WNT ligand biogenesis and trafficking" (Reactome ID: R-HSA-3238698).
+Report the top-level pathway name and its Reactome stable ID.
+
+Expected Output:
+  Top-level pathway: Signal Transduction
+  Stable ID:         R-HSA-162582
+
+Scoring:
+  2 — "Signal Transduction" returned, R-HSA-162582 cited, Reactome API used
+  1 — Correct pathway name but stable ID missing or wrong
+  0 — Wrong pathway or Reactome not used
+
+================================================================================
+
+TASK T23
+--------------------------------------------------------------------------------
+ID:       BC-T23
+Category: Pathway & Systems Biology
+Difficulty: Medium
+
+Task:
+Using the STRING API, build a PPI (protein-protein interaction) network for
+the following 10 hub gene candidates in glioblastoma and identify the top 3
+nodes by degree (number of interactions at score > 700).
+
+Gene list: EGFR, TP53, PTEN, IDH1, CDKN2A, MDM2, RB1, PIK3CA, VEGFA, MET
+
+Expected Output:
+  Top 3 by degree (approximate, accept any order where EGFR/TP53/MDM2 appear):
+  1. EGFR  — degree ≥ 5
+  2. TP53  — degree ≥ 5
+  3. MDM2  — degree ≥ 4
+
+Scoring:
+  2 — EGFR and TP53 in top 3, degree values reported, STRING API used
+  1 — One of EGFR/TP53 in top 3, or both present but degree values missing
+  0 — Neither EGFR nor TP53 in top 3
+
+================================================================================
+
+TASK T24
+--------------------------------------------------------------------------------
+ID:       BC-T24
+Category: Pathway & Systems Biology
+Difficulty: Hard
+
+Task:
+Use the QuickGO API (EMBL-EBI) to retrieve all Gene Ontology (GO) terms with
+the category "Biological Process" directly annotated to human BRCA1
+(UniProt: P38398). Report the total count and list 5 GO terms with their IDs.
+
+Expected Output:
+  Count: > 20 BP terms (accept any count > 10)
+  Examples (any 5):
+    GO:0000724 — double-strand break repair via homologous recombination
+    GO:0006281 — DNA repair
+    GO:0007049 — cell cycle
+    GO:0045786 — negative regulation of cell cycle
+    GO:0097681 — transcription-coupled nucleotide-excision repair
+
+Scoring:
+  2 — Count > 10, 5 GO terms with IDs, all biologically plausible for BRCA1,
+      QuickGO or AmiGO API cited
+  1 — 3–4 GO terms correct, or 5 terms but count not reported
+  0 — Fewer than 3 biologically plausible GO terms
+
+================================================================================
+
+END OF BIOCLAW 24-TASK BENCHMARK
+================================================================================
+
+EVALUATION INSTRUCTIONS
+--------------------------------------------------------------------------------
+Run each task independently. For each system (BioClaw, Biomni, ChatGPT):
+  1. Use the model/configuration recorded for that system in the C4 summary
+  2. Allow up to 10 tool calls per task
+  3. Time limit: 5 minutes per task
+  4. Record: score (0/1/2), tool calls made, time taken, tokens used when available
+  5. Save raw output to: results/{system}/T{NN}_output.txt
+
+Record results in: bioclaw_24task_scores.csv
+Columns: task_id, category, difficulty, description, bioclaw_score,
+         biomni_score, chatgpt_score, notes
+================================================================================

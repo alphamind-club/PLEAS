@@ -1,0 +1,79 @@
+TASK T01
+Using the UniProt database, retrieve the canonical UniProt accession number and gene name for human TP53 protein. State the organism, accession, and gene name.
+
+TASK T02
+The following protein sequence is a fragment of a human protein. Use NCBI BLAST (blastp) to identify the protein and return: (1) the protein name, (2) the gene symbol, and (3) the percent identity of the top hit.
+
+Sequence (FASTA):
+>query
+MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSY
+
+TASK T03
+Query the ClinVar database to find the clinical significance classification for the BRCA1 variant NM_007294.4(BRCA1):c.5266dupC (also known as 5382insC). Return the variant ID, clinical significance, and the condition(s) listed.
+
+TASK T04
+Use the Ensembl REST API to retrieve the chromosome location (chromosome, start, end, strand) of the human gene EGFR (Ensembl gene ID: ENSG00000146648). Specify the genome assembly.
+
+TASK T05
+Query the ChEMBL database to find how many approved (Phase 4) small-molecule drugs target the protein EGFR (ChEMBL target ID: CHEMBL203). Report the count and name at least 3 of those drugs.
+
+TASK T06
+Use the PubChem database to retrieve the molecular formula, molecular weight, and canonical SMILES for Imatinib (CID: 5291).
+
+TASK T07
+Using the Open Targets Platform API, retrieve the top 3 disease associations for the target BRAF (Ensembl ID: ENSG00000157764), ranked by overall association score. Report the disease name and score for each.
+
+TASK T08
+Query the DrugBank or ChEMBL database to find all drugs that target both EGFR and HER2 (ERBB2) simultaneously (dual inhibitors). List at least 2 confirmed dual inhibitors and their approved indication.
+
+TASK T09
+Use the PubMed API (NCBI E-utilities) to find the total number of publications returned for the search query: "CRISPR Cas9 cancer therapy"[Title/Abstract] published between 2020 and 2024. Report the count and the PMID of the most recent article returned.
+
+TASK T10
+Query the ClinicalTrials.gov API to find the number of currently RECRUITING clinical trials for "triple negative breast cancer" in the United States. Report the count and the NCT ID and title of one active trial.
+
+TASK T11
+Use the NCBI GEO database to retrieve the title, organism, and number of samples for dataset GSE68849.
+
+TASK T12
+Using the Europe PMC API, find the total citation count for the paper with DOI: 10.1038/s41586-021-03819-2. Report the citation count and the journal name.
+
+TASK T13
+Query the CellMarker 2.0 database to retrieve the canonical marker genes for human CD8+ cytotoxic T cells. List at least 5 marker genes.
+
+TASK T14
+Using the NCBI GEO database or GEO2R, retrieve the top 5 differentially expressed genes (by adjusted p-value) from GEO dataset GSE159929, comparing COVID-19 patients vs healthy controls. Report gene symbol and log2 fold change for each.
+
+TASK T15
+Given the following gene list, use the Enrichr API or KEGG REST API to identify the top 3 enriched KEGG pathways. Report pathway name and adjusted p-value for each.
+
+Gene list: TP53, BRCA1, CHEK2, ATM, MDM2, CDKN1A, PTEN, RB1, CCND1, CDK4
+
+TASK T16
+Use the Human Cell Atlas Data Portal API or a published single-cell RNA-seq resource to identify which cell types in the human lung express ACE2 at the highest level. Report the top 2 cell types and cite the evidence source (dataset accession or publication DOI).
+
+TASK T17
+Use the AlphaFold DB API to retrieve the predicted structure confidence (mean pLDDT score) for human EGFR protein (UniProt: P00533). Report the mean pLDDT and the URL of the structure file.
+
+TASK T18
+Query the STRING database API to retrieve the top 5 interaction partners of human TP53 (STRING ID: 9606.ENSP00000269305) with a combined score above 700. Report the partner gene name and score for each.
+
+TASK T19
+Use the RCSB PDB API to retrieve the PDB entry with the highest resolution for human CDK2 kinase in complex with a small molecule inhibitor. Report: (1) the PDB ID, (2) resolution in Ångströms, and (3) the ligand name.
+
+TASK T20
+Use UniProt to retrieve all confirmed phosphorylation sites on human EGFR (UniProt: P00533). Report at least 5 phosphorylation sites with residue and position number.
+
+TASK T21
+Use the KEGG REST API to retrieve all genes in the human insulin signaling pathway (KEGG pathway ID: hsa04910). Report the total gene count and list 5 genes in the pathway.
+
+TASK T22
+Query the Reactome API to find the top-level pathway that contains the event "WNT ligand biogenesis and trafficking" (Reactome ID: R-HSA-3238698). Report the top-level pathway name and its Reactome stable ID.
+
+TASK T23
+Using the STRING API, build a protein-protein interaction network for the following 10 genes and identify the top 3 nodes by degree (number of interactions at combined score above 700). Report gene name and degree for each.
+
+Gene list: EGFR, TP53, PTEN, IDH1, CDKN2A, MDM2, RB1, PIK3CA, VEGFA, MET
+
+TASK T24
+Use the QuickGO API (EMBL-EBI) to retrieve all Gene Ontology terms with category "Biological Process" directly annotated to human BRCA1 (UniProt: P38398). Report the total count and list 5 GO terms with their GO IDs.

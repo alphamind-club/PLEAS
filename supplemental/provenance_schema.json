@@ -1,0 +1,334 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Provenance-first merged record schema (expanded)",
+  "type": "object",
+  "required": [
+    "record_id",
+    "canonical",
+    "provenance",
+    "diagnostics"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "description": "Internal unique id for the merged record"
+    },
+    "canonical": {
+      "type": "object",
+      "description": "Canonical selected values for core bibliographic fields",
+      "properties": {
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "doi": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pmid": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "abstract": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authors": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "journal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pubdate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO-like date string when available"
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Per-field list of provenance contributions",
+      "patternProperties": {
+        "^.*$": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "source_file",
+              "source_type",
+              "source_path",
+              "raw_value",
+              "parser_name",
+              "field_confidence"
+            ],
+            "properties": {
+              "source_file": {
+                "type": "string"
+              },
+              "source_type": {
+                "type": "string",
+                "description": "xml/json/jsonl/python_literal/raw"
+              },
+              "source_path": {
+                "type": "string",
+                "description": "Path within the source (e.g., XPath or JSON key path)"
+              },
+              "raw_value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parser_name": {
+                "type": "string"
+              },
+              "parse_meta_ref": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "Small copy or ref to the parse_meta for this candidate"
+              },
+              "field_confidence": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0
+              },
+              "extraction_notes": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "parse_candidates": {
+      "type": "array",
+      "description": "List of parse candidates produced from layered decoding of input artifacts",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "normalized",
+          "parse_meta"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": "string"
+          },
+          "normalized": {
+            "type": "object",
+            "description": "Normalized canonical fields from this candidate",
+            "properties": {
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "doi": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pmid": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "abstract": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "authors": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "journal": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pubdate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": true
+          },
+          "parse_meta": {
+            "type": "object",
+            "required": [
+              "parse_mode",
+              "parser_name",
+              "candidate_rank",
+              "parse_confidence"
+            ],
+            "properties": {
+              "parse_mode": {
+                "type": "string",
+                "description": "One of json, jsonl, python_literal, xml, raw"
+              },
+              "parser_name": {
+                "type": "string"
+              },
+              "candidate_rank": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "parse_confidence": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 1.0
+              },
+              "parse_layers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "mode": {
+                      "type": "string"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "error": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "notes": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "truncated": {
+                "type": "boolean"
+              },
+              "source_path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "raw_preview": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "parse_duration_ms": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "properties": {
+        "merged_from_candidates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "matched_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "pmid",
+              "doi",
+              "title",
+              "none"
+            ]
+          }
+        },
+        "token_set_score": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "suspect_merge": {
+          "type": "boolean"
+        },
+        "merge_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "conflicting_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,1 +1,48 @@
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Environment files (contain API keys)
+.env
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+bun.lock
+
+# Jupyter
+.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+
+# Coverage
+htmlcov/
+.coverage
+
+# BioPLEASE runtime
+.bioplease/
+state.json
+run-journal.ndjson

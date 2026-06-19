@@ -1,0 +1,5 @@
+config,avg_tokens_per_call,reduction_pct,task_success_pct,n_calls,source
+"Baseline (Biomni, no BioPLEASE)",103830.4,NA,72,18,"Confirmed from API log screenshot (Sept 2025); per-call average input tokens."
+"BioPLEASE - No Compression (F5 disabled)",67320,35.2,79,14,"avg_tokens_per_call paper-stated; n_calls matches full run structure."
+"BioPLEASE - No Phase Isolation (F3 disabled)",58441,43.7,81,15,"avg_tokens_per_call paper-stated; n_calls +1 vs full."
+"Full BioPLEASE",24851.5,76.1,88,14,"Confirmed from API log screenshot (Dec 2025); per-call average input tokens."
