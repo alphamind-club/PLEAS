@@ -1,0 +1,32 @@
+{
+  "system_id": "SYSTEM_3_NAME_HERE",
+  "description": "PLACEHOLDER — Replace this file with actual model answers. Update system_id to the real system name (e.g. 'BioClaw', 'Biomni', 'ChatGPT').",
+  "model": "model_name_and_version",
+  "date_collected": "YYYY-MM-DD",
+  "answers": {
+    "T01": "Paste the full raw output from System 3 for task T01 here.",
+    "T02": "Paste the full raw output from System 3 for task T02 here.",
+    "T03": "Paste the full raw output from System 3 for task T03 here.",
+    "T04": "Paste the full raw output from System 3 for task T04 here.",
+    "T05": "Paste the full raw output from System 3 for task T05 here.",
+    "T06": "Paste the full raw output from System 3 for task T06 here.",
+    "T07": "Paste the full raw output from System 3 for task T07 here.",
+    "T08": "Paste the full raw output from System 3 for task T08 here.",
+    "T09": "Paste the full raw output from System 3 for task T09 here.",
+    "T10": "Paste the full raw output from System 3 for task T10 here.",
+    "T11": "Paste the full raw output from System 3 for task T11 here.",
+    "T12": "Paste the full raw output from System 3 for task T12 here.",
+    "T13": "Paste the full raw output from System 3 for task T13 here.",
+    "T14": "Paste the full raw output from System 3 for task T14 here.",
+    "T15": "Paste the full raw output from System 3 for task T15 here.",
+    "T16": "Paste the full raw output from System 3 for task T16 here.",
+    "T17": "Paste the full raw output from System 3 for task T17 here.",
+    "T18": "Paste the full raw output from System 3 for task T18 here.",
+    "T19": "Paste the full raw output from System 3 for task T19 here.",
+    "T20": "Paste the full raw output from System 3 for task T20 here.",
+    "T21": "Paste the full raw output from System 3 for task T21 here.",
+    "T22": "Paste the full raw output from System 3 for task T22 here.",
+    "T23": "Paste the full raw output from System 3 for task T23 here.",
+    "T24": "Paste the full raw output from System 3 for task T24 here."
+  }
+}
