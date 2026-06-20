@@ -7,7 +7,7 @@ Thomas Pan<sup>1</sup>, Jake Y. Chen<sup>2</sup>
 <sup>1</sup>Alpha Mind Club, LLC, Birmingham, AL, USA
 <sup>2</sup>Department of Biomedical Informatics and Data Science, University of Alabama at Birmingham, Birmingham, AL, USA
 
-> **IEEE IRI 2026** | [Paper PDF](#) | [Citation](#citation)
+> **IEEE IRI 2026** | [Citation](#citation)
 
 ---
 
