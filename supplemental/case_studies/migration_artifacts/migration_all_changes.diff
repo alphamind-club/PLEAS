@@ -1,0 +1,1697 @@
+diff --git a/bioplease/agent/a1.py b/bioplease/agent/a1.py
+index 4e753d3..9fa167e 100644
+--- a/bioplease/agent/a1.py
++++ b/bioplease/agent/a1.py
+@@ -65,7 +65,9 @@ def log_llm_event(tag: str, content) -> None:
+     text = _msgs_to_text(content).strip()
+     with open(LOG_FILE, "a", encoding="utf-8") as f:
+         f.write(f"{tag}:\n")
+-        f.write(text + "\n\n")
++        f.write(text + "
++
++")
+ 
+ class AgentState(TypedDict):
+     messages: list[BaseMessage]
+@@ -779,8 +781,12 @@ class A1:
+             "<<RESULTS>>":     self._escape_tex(fields["results"]),
+             "<<DISCUSSION>>":  self._escape_tex(fields["discussion"]),
+             "<<REFERENCES>>":  self._escape_tex(fields["references"]),
+-            "<<FIGURES>>":     "\n\n".join(figs_block),
+-            "<<CODE>>":        "\n\n".join(code_block_parts),
++            "<<FIGURES>>":     "
++
++".join(figs_block),
++            "<<CODE>>":        "
++
++".join(code_block_parts),
+         }
+         for k,v in replacements.items():
+             tmpl = tmpl.replace(k, v)
+@@ -1733,21 +1739,33 @@ You are a helpful biomedical assistant assigned with the task of problem-solving
+ To achieve this, you will be using an interactive coding environment equipped with a variety of tool functions, data, and softwares to assist you throughout the process.
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++Format your plan as a checklist with empty checkboxes like this:
++
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Always show the updated plan after each step so the user can track progress.
+ 
+@@ -1762,6 +1780,10 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -2099,7 +2121,7 @@ You are also the Plan agent of the PLAN-LEARN-EXECUTE-ASSESS-SHARE (or PLEAS) ag
+ 
+ Try to keep the total cost within the budget if one is provided.
+ 
+-When you wish to update the plan after ASSESS phase feedback, extract the previous plan from that phase output and revise it accordingly. Only revise what needs to be changed based on the feedback, keeping the rest of the plan intact.
++When you wish to update the plan after ASSESS phase feedback, you MUST extract the previous plan from that phase output and revise it accordingly. CRITICAL: You must absolutely force yourself to remember and include the HIGH-LEVEL, full-scope original plan. NEVER delete future high-level steps. Only insert new micro-steps as sub-tasks for the current step, keeping the rest of the overarching global plan intact.
+ 
+ PLEAS Framework for Agents:
+ 
+@@ -2203,21 +2225,33 @@ To problem solve, you will need to create a high-level and well orchestrated pla
+ You are the planning agent. Your responsibility is to carefully analyze the user’s query, break it down into structured goals, and design a step-by-step plan for how to solve it. You do not execute or code yet — only plan.  
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Rules:
+ - Do not retrieve, run code, or output results.  
+@@ -3031,6 +3065,10 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -3374,7 +3412,7 @@ Instructions:
+ 3. Evaluate scientific reasoning and validity — assess whether the chosen methods, statistical approaches, biological assumptions, and drawn conclusions make scientific sense. Flag any methodological flaws or unsupported interpretations.
+ 4. Identify errors, missing pieces, or improvements.  
+ 5. Decide whether the workflow should:
+-   - Go back to PLAN (if the approach itself is flawed or scientifically unsound),  
++   - Go back to PLAN (if the approach itself is flawed, to map out the next high-level step, or to update progress. When routing to plan, explicitly instruct the PLAN agent to KEEP THE FULL GLOBAL PLAN INTACT and just add sub-tasks.),  
+    - Go back to LEARN (if more knowledge or literature is needed before proceeding),  
+    - Go back to EXECUTE (if code/results need fixing or the science is right but execution failed),  
+    - Or move to SHARE (if the solution is scientifically valid, correct, and complete).  
+@@ -3401,6 +3439,7 @@ EVIDENCE AND RIGOR RULES — STRICTLY ENFORCED:
+ 
+ In each response, you must include EITHER <goplan>, <golearn>, <goexecute>, or <goshare> tag. Not multiple at the same time. YOU DO NOT NEED TO CLOSE THE <goplan>, <golearn>, <goexecute>, OR <goshare> TAGS. Do not respond with messages without any tags. No empty messages.
+ If you provide more than one tag, even if you mentioned them in passing, you will misroute yourself. So be careful and only provide one tag.
++If you route to <goexecute> to finish incomplete steps or fix issues, you MUST include a "### MISSING STEPS" header at the very end of your response, followed by a markdown checklist of the exact items that need to be completed next.
+ 
+ MANDATORY RESPONSE STRUCTURE — you MUST use exactly these section headers in this order:
+ 1) Comparison with PLAN objectives
+@@ -3419,10 +3458,14 @@ MANDATORY RESPONSE STRUCTURE — you MUST use exactly these section headers in t
+ 
+ 5) Decision / routing
+    - State which phase to route to and WHY in 1-3 sentences.
++   - Include the exact routing tag (e.g. <goexecute>).
+ 
+ 6) Plan progress update (what's done, what's next)
+    - Bullet list: what has been completed so far and what the next step should be.
+ 
++### MISSING STEPS
++   - If (AND ONLY IF) you chose <goexecute> to correct issues or finish steps, provide a markdown checklist here of the exact micro-steps needed next. (Do not include this section for other routes).
++
+ <goplan|golearn|goexecute|goshare>  ← replace with exactly ONE tag
+ 
+ DO NOT skip any section. DO NOT collapse sections together. Each section must have at least 2 sentences or bullet points.
+@@ -3868,7 +3911,9 @@ In each response, you must include EITHER <goplan>, <goexecute>, or <goshare> ta
+         # Enhanced prompt for detailed, in-depth summarization
+         prompt = (
+             "You are maintaining a comprehensive long-term memory of a scientific research project.\n"
+-            "Your role is to create a DETAILED, STRUCTURED summary that captures ALL important information.\n\n"
++            "Your role is to create a DETAILED, STRUCTURED summary that captures ALL important information.
++
++"
+             
+             "=== REQUIREMENTS ===\n"
+             "1. Be COMPREHENSIVE - include all key details, not just highlights\n"
+@@ -3878,7 +3923,9 @@ In each response, you must include EITHER <goplan>, <goexecute>, or <goshare> ta
+             "5. Document PROGRESS - what worked, what failed, lessons learned\n"
+             "6. Note DATA/FILES - specific datasets, outputs, paths referenced\n"
+             "7. Record ERRORS/FIXES - problems encountered and how they were resolved\n"
+-            "8. Capture NEXT STEPS - planned actions and open questions\n\n"
++            "8. Capture NEXT STEPS - planned actions and open questions
++
++"
+             
+             "=== FORMAT ===\n"
+             "Use markdown with clear sections:\n"
+@@ -3889,17 +3936,27 @@ In each response, you must include EITHER <goplan>, <goexecute>, or <goshare> ta
+             "## Data & Resources\n"
+             "## Results & Findings\n"
+             "## Issues & Solutions\n"
+-            "## Next Steps\n\n"
++            "## Next Steps
++
++"
+             
+             "=== STYLE ===\n"
+             "- Use bullet points for clarity\n"
+             "- Include specific numbers, file names, parameters\n"
+             "- Be precise and technical\n"
+             "- Avoid vague summaries\n"
+-            "- Build upon and enhance the previous summary rather than replacing it\n\n"
++            "- Build upon and enhance the previous summary rather than replacing it
++
++"
+             
+-            f"=== PREVIOUS SUMMARY ===\n{prev_summary if prev_summary else '(Starting new research session)'}\n\n"
+-            f"=== RECENT CONVERSATION ===\n" + "\n\n".join(recent) + "\n\n"
++            f"=== PREVIOUS SUMMARY ===\n{prev_summary if prev_summary else '(Starting new research session)'}
++
++"
++            f"=== RECENT CONVERSATION ===\n" + "
++
++".join(recent) + "
++
++"
+             
+             "Now update the summary by integrating the recent conversation into the existing structure. "
+             "Expand on what was there before and add new information from the recent messages."
+@@ -4134,7 +4191,9 @@ Do not provide any explanation, just YES or NO."""
+                 current_step_num = m.group(1)
+ 
+         if current_step_num is None:
+-            return f"FULL PLAN (could not determine active step):\n\n{plan_text[:3000]}"
++            return f"FULL PLAN (could not determine active step):
++
++{plan_text[:3000]}"
+ 
+         top_num = current_step_num.split(".")[0]
+ 
+@@ -4157,11 +4216,15 @@ Do not provide any explanation, just YES or NO."""
+         if step_block:
+             return (
+                 f"CURRENT PLAN STEP (Step {top_num}) — "
+-                f"ALL sub-steps below must be fully completed in this single EXECUTE call:\n\n"
++                f"ALL sub-steps below must be fully completed in this single EXECUTE call:
++
++"
+                 f"{step_block}"
+             )
+         # Fallback: full plan
+-        return f"FULL PLAN (active step ~{current_step_num}):\n\n{plan_text[:3000]}"
++        return f"FULL PLAN (active step ~{current_step_num}):
++
++{plan_text[:3000]}"
+ 
+     def _build_micro_plan_state(
+         self,
+@@ -4486,7 +4549,7 @@ NOW GENERATE THE MICRO-PLAN:"""
+         """
+         # Use LLM to intelligently assess the execution result
+         assessment_prompt = f"""[MICRO-STEP ASSESSMENT]
+-You are assessing the result of a micro-step execution.
++You are a rigorous code execution assessor enforcing EXACT micro-step completion.
+ 
+ MICRO-STEP DETAILS:
+ ID: {micro_step.get('id', 'unknown')}
+@@ -4498,11 +4561,12 @@ EXECUTION RESULT:
+ {result[:2000]}
+ 
+ TASK:
+-Assess if this micro-step was successful and whether it should be retried.
++Assess if this EXACT micro-step was successfully completed.
++Do NOT accept it if the agent performed a different or future step (e.g., ran UMAP when asked to initialize PCA params).
+ 
+ Respond in JSON format with these fields:
+ {{
+-  "is_success": true/false,  // Did the step achieve its goal?
++  "is_success": true/false,  // Did the step achieve its exact goal?
+   "should_retry": true/false,  // Should we retry if it failed?
+   "is_fixable": true/false,  // Can the error be fixed by regenerating code?
+   "error_summary": "concise error description or null",
+@@ -4511,14 +4575,15 @@ Respond in JSON format with these fields:
+ }}
+ 
+ ASSESSMENT CRITERIA:
+-1. is_success = true if:
++1. is_success = true ONLY if:
+    - No errors occurred
+-   - Expected outputs are present (or reasonable progress shown)
+-   - Code executed and produced meaningful results
++   - The EXACT expected output was requested and produced
++   - No off-step or future work was performed (if it jumped ahead, fail it)
+ 
+ 2. should_retry = true if:
++   - Error occurred or output is incomplete
++   - The agent performed off-step work (feedback MUST tell it to only do the requested step)
+    - Error is likely fixable (NameError, TypeError, AttributeError, etc.)
+-   - The execution shows partial progress
+    - Retry count is still low (< 20)
+ 
+ 3. should_retry = false if:
+@@ -4667,15 +4732,21 @@ Respond ONLY with valid JSON."""
+         accumulated_observations = state["artifacts"].get("micro_accumulated_observations", [])
+         
+         # Merge all code into one block
+-        consolidated_code = "\n\n".join(accumulated_code) if accumulated_code else ""
++        consolidated_code = "
++
++".join(accumulated_code) if accumulated_code else ""
+         
+         # Merge all observations into one
+-        consolidated_observations = "\n\n".join(accumulated_observations) if accumulated_observations else ""
++        consolidated_observations = "
++
++".join(accumulated_observations) if accumulated_observations else ""
+         
+         # Format the final output
+         final_output = ""
+         if consolidated_code:
+-            final_output += f"<execute>\n{consolidated_code}\n</execute>\n\n"
++            final_output += f"<execute>\n{consolidated_code}\n</execute>
++
++"
+         if consolidated_observations:
+             final_output += f"<observation>\n{consolidated_observations}\n</observation>"
+         
+@@ -4696,7 +4767,9 @@ Respond ONLY with valid JSON."""
+             with open(code_path, "w", encoding="utf-8") as _cf:
+                 _cf.write(f"# Auto-saved consolidated execute code — {ts_label}\n")
+                 _cf.write(f"# ARTIFACTS = {getattr(self, 'run_artifacts_dir', 'N/A')}\n")
+-                _cf.write(f"# FIGURES   = {getattr(self, 'run_figures_dir', 'N/A')}\n\n")
++                _cf.write(f"# FIGURES   = {getattr(self, 'run_figures_dir', 'N/A')}
++
++")
+                 _cf.write(consolidated_code + "\n")
+             print(f"  📄 Code saved: {code_path}")
+     
+@@ -5298,6 +5371,21 @@ Figure saving — after saving a plot at `img_path`, also do BOTH:
+                 while retry_count < RETRY_LIMIT_PER_STEP:
+                     print(f"  🔄 Attempt {retry_count + 1}/{RETRY_LIMIT_PER_STEP}")
+                     
++                    if retry_count == 0:
++                        # Append the initial prompt for this micro-step to the message history
++                        # so the LLM gets proper conversation context and we avoid back-to-back AI messages.
++                        concrete = micro_step.get('concrete_instructions') or micro_step['description']
++                        initial_prompt = f"[MICRO-STEP {micro_step['id']}]\nTask: {micro_step['description']}
++
++Concrete instructions:\n{concrete}
++
++Success criteria: {micro_step.get('expected_outputs', 'Code executes without errors')}
++
++ANTI-DRIFT RULES:\n- DO NOT perform future steps.\n- DO NOT rerun previous steps unless explicitly asked.\n- DO NOT substitute \"equivalent progress\"; perform EXACTLY this step and stop.\n- FAIL rather than jump ahead.
++
++Write ONLY the Python code needed for THIS step in <execute>...</execute> tags.\nFollow the concrete instructions above exactly — do not skip ahead or do other steps.\nKeep it focused."
++                        state["messages"].append(HumanMessage(content=initial_prompt))
++
+                     # Generate and execute code for this specific micro-step
+                     code, observation, success = _execute_micro_step(self, state, micro_step, retry_count)
+                     
+@@ -5337,6 +5425,13 @@ Fix the structural issue and emit corrected code in <execute>...</execute> tags.
+                         # Accumulate successful code and observation
+                         state["artifacts"]["micro_accumulated_code"].append(f"# Micro-step {step_idx + 1}: {micro_step['description']}\n{code}")
+                         state["artifacts"]["micro_accumulated_observations"].append(f"[Step {step_idx + 1}] {observation}")
++                        
++                        # Add success observation to the conversation history so the LLM sees the result
++                        success_msg = f"[Step {step_idx + 1} SUCCESS]\nObservation:\n{observation[:1000]}"
++                        if len(observation) > 1000:
++                            success_msg += "...\n(observation truncated)"
++                        state["messages"].append(HumanMessage(content=success_msg))
++
+                         # Move to next step
+                         state["artifacts"]["micro_step_index"] = step_idx + 1
+                         state["artifacts"]["micro_step_retries"][retry_key] = 0
+@@ -5442,6 +5537,9 @@ Proceeding to assessment with partial results."""
+             print(f"Successfully completed {state['artifacts']['micro_step_index']} of {len(micro_plan)} steps")
+             print(f"{'='*80}\n")
+             
++            # Transition message to cleanly break out of step generation code context
++            state["messages"].append(HumanMessage(content="[MACRO-EXECUTE] All micro-steps completed. Transitioning to ASSESS phase. Review all previous state context."))
++
+             # Consolidate and save final state
+             self._consolidate_micro_execution_state(state)
+             
+@@ -5486,20 +5584,6 @@ Proceeding to assessment with partial results."""
+         def _execute_micro_step(self, state: AgentState, micro_step: dict, retry_count: int) -> tuple[str, str, bool]:
+             """Execute a single micro-step and return (code, observation, success)."""
+             
+-            # Prefer the concrete instructions if available, fall back to description
+-            concrete = micro_step.get('concrete_instructions') or micro_step['description']
+-            micro_step_prompt = f"""[MICRO-STEP {micro_step['id']}]
+-Task: {micro_step['description']}
+-
+-Concrete instructions:
+-{concrete}
+-
+-Success criteria: {micro_step.get('expected_outputs', 'Code executes without errors')}
+-
+-Write ONLY the Python code needed for THIS step in <execute>...</execute> tags.
+-Follow the concrete instructions above exactly — do not skip ahead or do other steps.
+-Keep it focused (under 40 lines where possible)."""
+-            
+             phase_hint = f"""
+ [PHASE: EXECUTE - MICRO-STEP]
+ OUTPUT DIRECTORY RULES — THE RUN DIRECTORY HAS 3 SUBDIRS AND NO FILES LIVE ANYWHERE ELSE:
+@@ -5529,11 +5613,10 @@ Figure saving — after saving a plot at `img_path`, also do BOTH:
+   2) print(f"<<FIGURE:{{img_path}}|{{caption}}>>"
+ """
+             
+-            # Add micro-step context to messages
++            # Add phase instructions to the history
+             messages = [
+                 SystemMessage(content=phase_hint),
+                 SystemMessage(content=self._prompt_for("EXECUTE")),
+-                SystemMessage(content=micro_step_prompt)
+             ] + state["messages"]
+             
+             llm = self._llm_for("EXECUTE")
+@@ -5649,7 +5732,9 @@ Figure saving — after saving a plot at `img_path`, also do BOTH:
+                         return (code, f"FORMAT ERROR: {format_error}", False)
+                     else:
+                         state["messages"].append(AIMessage(
+-                            content=f"<observation>FORMAT ERROR: {format_error}\n\nPlease emit ONLY executable code inside <execute> tags. No narrative text, markdown, or explanations inside the tags.</observation>"
++                            content=f"<observation>FORMAT ERROR: {format_error}
++
++Please emit ONLY executable code inside <execute> tags. No narrative text, markdown, or explanations inside the tags.</observation>"
+                         ))
+                         state["next_step"] = "execute"
+                         return state
+@@ -5668,7 +5753,9 @@ Figure saving — after saving a plot at `img_path`, also do BOTH:
+                             return (code, f"SYNTAX ERROR: {syntax_error}", False)
+                         else:
+                             state["messages"].append(AIMessage(
+-                                content=f"<observation>SYNTAX ERROR: {syntax_error}\n\nFix the syntax and emit corrected code in <execute>...</execute> tags.</observation>"
++                                content=f"<observation>SYNTAX ERROR: {syntax_error}
++
++Fix the syntax and emit corrected code in <execute>...</execute> tags.</observation>"
+                             ))
+                             state["next_step"] = "execute"
+                             return state
+@@ -5734,7 +5821,9 @@ Figure saving — after saving a plot at `img_path`, also do BOTH:
+                 if self.product_manager and self.product_manager.current_state:
+                     current_exec_output = self.product_manager.current_state.execute_output or ""
+                     # Append observation to the execute output
+-                    updated_output = current_exec_output + "\n\n" + observation.strip()
++                    updated_output = current_exec_output + "
++
++" + observation.strip()
+                     self.product_manager.current_state.execute_output = updated_output
+                     self.product_manager.state_manager.save_state(self.product_manager.current_state)
+                 
+@@ -5940,7 +6029,9 @@ Do NOT include:
+             # Save the mid-run report
+             with open(report_path, "w", encoding="utf-8") as f:
+                 f.write(f"# Mid-Run Progress Report\n")
+-                f.write(f"Generated: {ts}\n\n")
++                f.write(f"Generated: {ts}
++
++")
+                 f.write(report_text)
+ 
+             # Update State - pass only a reference to the report file, not the full content
+@@ -6034,6 +6125,23 @@ Do NOT include:
+                 state["next_step"] = "learn"
+             elif "<goexecute>" in msg_lower:
+                 state["next_step"] = "execute"
++                # Check for revised continuation plan
++                if "### MISSING STEPS" in msg.upper() or "### MISSING MICRO-STEPS" in msg.upper():
++                    import re
++                    match = re.search(r'###\s*MISSING\s*STEPS(.*)', msg, re.IGNORECASE | re.DOTALL)
++                    if match:
++                        missing_steps_text = match.group(1)
++                        if "artifacts" not in state:
++                            state["artifacts"] = {}
++                        steps = []
++                        for line in missing_steps_text.split('\n'):
++                            if line.strip().startswith('-') or line.strip().startswith('*'):
++                                # Trim the bullet character and whitespace
++                                item_text = line.strip()[1:].strip()
++                                steps.append({"step": item_text, "expected": "Completion of this specific missing step."})
++                        if steps:
++                            state["artifacts"]["revised_micro_plan"] = steps
++                            print(f"\n[ASSESS] Found revised micro-plan with {len(steps)} steps.")
+             elif "<goshare>" in msg_lower:
+                 state["next_step"] = "share"
+             # New: robust parsing with retries
+@@ -6238,7 +6346,9 @@ IMPORTANT:
+                 caption = rec.get("caption", "")
+                 fig_md_lines.append(f'![{label}: {caption}]({rel})')
+ 
+-            figures_md = "\n\n".join(fig_md_lines)
++            figures_md = "
++
++".join(fig_md_lines)
+ 
+             # Inject before End matter if available; else append at end
+             if figures_md:
+@@ -6249,7 +6359,9 @@ IMPORTANT:
+                     idx = m_anchor.start()
+                     paper_text = paper_text[:idx] + f"\nFigures\n-------\n{figures_md}\n" + paper_text[idx:]
+                 else:
+-                    paper_text += f"\n\nFigures\n-------\n{figures_md}\n"
++                    paper_text += f"
++
++Figures\n-------\n{figures_md}\n"
+ 
+             # new
+             # --- Ensure artifacts dict exists
+@@ -6286,7 +6398,9 @@ IMPORTANT:
+ 
+             # --- Append a Code Appendix to the paper (before End matter if possible)
+             code_list_md = "\n".join(f"- `{p}`" for p in rel_code_paths) or "_(No <execute> blocks found)_"
+-            code_appendix = f"\n\nCode Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
++            code_appendix = f"
++
++Code Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
+ 
+             m_anchor = re.search(r"\n\s*End matter\b", paper_text, flags=re.IGNORECASE)
+             if m_anchor:
+@@ -6327,7 +6441,9 @@ IMPORTANT:
+                 f.write(paper_text)
+ 
+             with open(log_path_txt, "a", encoding="utf-8") as f:
+-                f.write(f"\n\n===== SHARE @ {ts} =====\n")
++                f.write(f"
++
++===== SHARE @ {ts} =====\n")
+                 f.write(conversation_blob)
+ 
+             # Also persist any extracted <solution> as a compact note (optional)
+@@ -6410,13 +6526,19 @@ IMPORTANT:
+                     code_lines.append("No code excerpts selected.")
+ 
+                 Path(content_tex).write_text(
+-                    "\n\n".join([
++                    "
++
++".join([
+                         sec("Introduction", fields.get("introduction","")),
+                         sec("Methods",      fields.get("methods","")),
+                         sec("Results",      fields.get("results","")),
+                         sec("Discussion",   fields.get("discussion","")),
+-                        "\\section{Figures}\n" + "\n\n".join(fig_lines),
+-                        "\\section{Code Excerpts}\n" + "\n\n".join(code_lines),
++                        "\\section{Figures}\n" + "
++
++".join(fig_lines),
++                        "\\section{Code Excerpts}\n" + "
++
++".join(code_lines),
+                         "\\section{References}\n" + self._escape_tex(fields.get("references","")),
+                     ]),
+                     encoding="utf-8"
+diff --git a/bioplease/agent/a1_langchain.py b/bioplease/agent/a1_langchain.py
+index 9913322..22d8250 100644
+--- a/bioplease/agent/a1_langchain.py
++++ b/bioplease/agent/a1_langchain.py
+@@ -187,13 +187,17 @@ class ValidatorAgent:
+             "- Evidence: Is the decision supported by credible literature or data?\n"
+             "- Reproducibility: Can the decision be independently verified?\n"
+             "- Transparency: Is the reasoning and evidence clearly documented?\n"
+-            "- Ethics: Are there any ethical, legal, or compliance concerns?\n\n"
++            "- Ethics: Are there any ethical, legal, or compliance concerns?
++
++"
+             "For each decision, run the following checks:\n"
+             "1. Evidence Check: Summarize supporting or missing evidence.\n"
+             "2. Reproducibility Check: Assess if the decision can be reproduced.\n"
+             "3. Transparency Check: Evaluate clarity of reasoning and documentation.\n"
+             "4. Ethics Check: Flag any issues.\n"
+-            "5. Synthesis: Provide a structured validation report (approve, flag, reject).\n\n"
++            "5. Synthesis: Provide a structured validation report (approve, flag, reject).
++
++"
+             "Output your findings in a structured format."
+         )
+ 
+@@ -273,7 +277,9 @@ def log_llm_event(tag: str, content) -> None:
+     text = _msgs_to_text(content).strip()
+     with open(LOG_FILE, "a", encoding="utf-8") as f:
+         f.write(f"{tag}:\n")
+-        f.write(text + "\n\n")
++        f.write(text + "
++
++")
+ 
+ class AgentState(TypedDict):
+     messages: list[BaseMessage]
+@@ -944,8 +950,12 @@ class A1:
+             "<<RESULTS>>":     self._escape_tex(fields["results"]),
+             "<<DISCUSSION>>":  self._escape_tex(fields["discussion"]),
+             "<<REFERENCES>>":  self._escape_tex(fields["references"]),
+-            "<<FIGURES>>":     "\n\n".join(figs_block),
+-            "<<CODE>>":        "\n\n".join(code_block_parts),
++            "<<FIGURES>>":     "
++
++".join(figs_block),
++            "<<CODE>>":        "
++
++".join(code_block_parts),
+         }
+         for k,v in replacements.items():
+             tmpl = tmpl.replace(k, v)
+@@ -1896,21 +1906,33 @@ You are a helpful biomedical assistant assigned with the task of problem-solving
+ To achieve this, you will be using an interactive coding environment equipped with a variety of tool functions, data, and softwares to assist you throughout the process.
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++Format your plan as a checklist with empty checkboxes like this:
++
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Always show the updated plan after each step so the user can track progress.
+ 
+@@ -1925,6 +1947,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -2291,21 +2316,33 @@ To problem solve, you will need to create a high-level and well orchestrated pla
+ You are the planning agent. Your responsibility is to carefully analyze the user’s query, break it down into structured goals, and design a step-by-step plan for how to solve it. You do not execute or code yet — only plan.  
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Rules:
+ - Do not retrieve, run code, or output results.  
+@@ -3001,6 +3038,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -4112,8 +4152,12 @@ Each library is listed with its description to help you understand its functiona
+         prompt = (
+             "You're compressing chat history into a handoff note.\n"
+             "Maintain: goals, decisions, data/files touched, tools used, errors+fixes, next intent.\n"
+-            "Keep ≤ 12 bullets. Update the previous summary instead of repeating it.\n\n"
+-            f"PREVIOUS SUMMARY:\n{prev_summary}\n\nRECENT:\n" + "\n".join(recent)
++            "Keep ≤ 12 bullets. Update the previous summary instead of repeating it.
++
++"
++            f"PREVIOUS SUMMARY:\n{prev_summary}
++
++RECENT:\n" + "\n".join(recent)
+         )
+         out = llm.invoke([HumanMessage(content=prompt)])
+         new_summary = (getattr(out, "content", str(out)) or "").strip()
+@@ -4692,7 +4736,9 @@ IMPORTANT:
+                 caption = rec.get("caption", "")
+                 fig_md_lines.append(f'![{label}: {caption}]({rel})')
+ 
+-            figures_md = "\n\n".join(fig_md_lines)
++            figures_md = "
++
++".join(fig_md_lines)
+ 
+             # Inject before End matter if available; else append at end
+             if figures_md:
+@@ -4703,7 +4749,9 @@ IMPORTANT:
+                     idx = m_anchor.start()
+                     paper_text = paper_text[:idx] + f"\nFigures\n-------\n{figures_md}\n" + paper_text[idx:]
+                 else:
+-                    paper_text += f"\n\nFigures\n-------\n{figures_md}\n"
++                    paper_text += f"
++
++Figures\n-------\n{figures_md}\n"
+ 
+             # new
+             # --- Ensure artifacts dict exists
+@@ -4740,7 +4788,9 @@ IMPORTANT:
+ 
+             # --- Append a Code Appendix to the paper (before End matter if possible)
+             code_list_md = "\n".join(f"- `{p}`" for p in rel_code_paths) or "_(No <execute> blocks found)_"
+-            code_appendix = f"\n\nCode Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
++            code_appendix = f"
++
++Code Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
+ 
+             m_anchor = re.search(r"\n\s*End matter\b", paper_text, flags=re.IGNORECASE)
+             if m_anchor:
+@@ -4781,7 +4831,9 @@ IMPORTANT:
+                 f.write(paper_text)
+ 
+             with open(log_path_txt, "a", encoding="utf-8") as f:
+-                f.write(f"\n\n===== SHARE @ {ts} =====\n")
++                f.write(f"
++
++===== SHARE @ {ts} =====\n")
+                 f.write(conversation_blob)
+ 
+             # Also persist any extracted <solution> as a compact note (optional)
+@@ -4864,13 +4916,19 @@ IMPORTANT:
+                     code_lines.append("No code excerpts selected.")
+ 
+                 Path(content_tex).write_text(
+-                    "\n\n".join([
++                    "
++
++".join([
+                         sec("Introduction", fields.get("introduction","")),
+                         sec("Methods",      fields.get("methods","")),
+                         sec("Results",      fields.get("results","")),
+                         sec("Discussion",   fields.get("discussion","")),
+-                        "\\section{Figures}\n" + "\n\n".join(fig_lines),
+-                        "\\section{Code Excerpts}\n" + "\n\n".join(code_lines),
++                        "\\section{Figures}\n" + "
++
++".join(fig_lines),
++                        "\\section{Code Excerpts}\n" + "
++
++".join(code_lines),
+                         "\\section{References}\n" + self._escape_tex(fields.get("references","")),
+                     ]),
+                     encoding="utf-8"
+diff --git a/bioplease/agent/a1_original_backup.py b/bioplease/agent/a1_original_backup.py
+index 019b21c..e93d176 100644
+--- a/bioplease/agent/a1_original_backup.py
++++ b/bioplease/agent/a1_original_backup.py
+@@ -63,7 +63,9 @@ def log_llm_event(tag: str, content) -> None:
+     text = _msgs_to_text(content).strip()
+     with open(LOG_FILE, "a", encoding="utf-8") as f:
+         f.write(f"{tag}:\n")
+-        f.write(text + "\n\n")
++        f.write(text + "
++
++")
+ 
+ class AgentState(TypedDict):
+     messages: list[BaseMessage]
+@@ -649,8 +651,12 @@ class A1:
+             "<<RESULTS>>":     self._escape_tex(fields["results"]),
+             "<<DISCUSSION>>":  self._escape_tex(fields["discussion"]),
+             "<<REFERENCES>>":  self._escape_tex(fields["references"]),
+-            "<<FIGURES>>":     "\n\n".join(figs_block),
+-            "<<CODE>>":        "\n\n".join(code_block_parts),
++            "<<FIGURES>>":     "
++
++".join(figs_block),
++            "<<CODE>>":        "
++
++".join(code_block_parts),
+         }
+         for k,v in replacements.items():
+             tmpl = tmpl.replace(k, v)
+@@ -1601,21 +1607,33 @@ You are a helpful biomedical assistant assigned with the task of problem-solving
+ To achieve this, you will be using an interactive coding environment equipped with a variety of tool functions, data, and softwares to assist you throughout the process.
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Always show the updated plan after each step so the user can track progress.
+ 
+@@ -1630,6 +1648,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -1982,21 +2003,33 @@ To problem solve, you will need to create a high-level and well orchestrated pla
+ You are the planning agent. Your responsibility is to carefully analyze the user’s query, break it down into structured goals, and design a step-by-step plan for how to solve it. You do not execute or code yet — only plan.  
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Rules:
+ - Do not retrieve, run code, or output results.  
+@@ -2690,6 +2723,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -3926,7 +3962,9 @@ IMPORTANT:
+                 caption = rec.get("caption", "")
+                 fig_md_lines.append(f'![{label}: {caption}]({rel})')
+ 
+-            figures_md = "\n\n".join(fig_md_lines)
++            figures_md = "
++
++".join(fig_md_lines)
+ 
+             # Inject before End matter if available; else append at end
+             if figures_md:
+@@ -3937,7 +3975,9 @@ IMPORTANT:
+                     idx = m_anchor.start()
+                     paper_text = paper_text[:idx] + f"\nFigures\n-------\n{figures_md}\n" + paper_text[idx:]
+                 else:
+-                    paper_text += f"\n\nFigures\n-------\n{figures_md}\n"
++                    paper_text += f"
++
++Figures\n-------\n{figures_md}\n"
+ 
+             # new
+             # --- Ensure artifacts dict exists
+@@ -3974,7 +4014,9 @@ IMPORTANT:
+ 
+             # --- Append a Code Appendix to the paper (before End matter if possible)
+             code_list_md = "\n".join(f"- `{p}`" for p in rel_code_paths) or "_(No <execute> blocks found)_"
+-            code_appendix = f"\n\nCode Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
++            code_appendix = f"
++
++Code Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
+ 
+             m_anchor = re.search(r"\n\s*End matter\b", paper_text, flags=re.IGNORECASE)
+             if m_anchor:
+@@ -4015,7 +4057,9 @@ IMPORTANT:
+                 f.write(paper_text)
+ 
+             with open(log_path_txt, "a", encoding="utf-8") as f:
+-                f.write(f"\n\n===== SHARE @ {ts} =====\n")
++                f.write(f"
++
++===== SHARE @ {ts} =====\n")
+                 f.write(conversation_blob)
+ 
+             # Also persist any extracted <solution> as a compact note (optional)
+@@ -4098,13 +4142,19 @@ IMPORTANT:
+                     code_lines.append("No code excerpts selected.")
+ 
+                 Path(content_tex).write_text(
+-                    "\n\n".join([
++                    "
++
++".join([
+                         sec("Introduction", fields.get("introduction","")),
+                         sec("Methods",      fields.get("methods","")),
+                         sec("Results",      fields.get("results","")),
+                         sec("Discussion",   fields.get("discussion","")),
+-                        "\\section{Figures}\n" + "\n\n".join(fig_lines),
+-                        "\\section{Code Excerpts}\n" + "\n\n".join(code_lines),
++                        "\\section{Figures}\n" + "
++
++".join(fig_lines),
++                        "\\section{Code Excerpts}\n" + "
++
++".join(code_lines),
+                         "\\section{References}\n" + self._escape_tex(fields.get("references","")),
+                     ]),
+                     encoding="utf-8"
+diff --git a/bioplease/agent/a1_preChain.py b/bioplease/agent/a1_preChain.py
+index b24bed3..99e3ab8 100644
+--- a/bioplease/agent/a1_preChain.py
++++ b/bioplease/agent/a1_preChain.py
+@@ -63,7 +63,9 @@ def log_llm_event(tag: str, content) -> None:
+     text = _msgs_to_text(content).strip()
+     with open(LOG_FILE, "a", encoding="utf-8") as f:
+         f.write(f"{tag}:\n")
+-        f.write(text + "\n\n")
++        f.write(text + "
++
++")
+ 
+ class AgentState(TypedDict):
+     messages: list[BaseMessage]
+@@ -729,8 +731,12 @@ class A1:
+             "<<RESULTS>>":     self._escape_tex(fields["results"]),
+             "<<DISCUSSION>>":  self._escape_tex(fields["discussion"]),
+             "<<REFERENCES>>":  self._escape_tex(fields["references"]),
+-            "<<FIGURES>>":     "\n\n".join(figs_block),
+-            "<<CODE>>":        "\n\n".join(code_block_parts),
++            "<<FIGURES>>":     "
++
++".join(figs_block),
++            "<<CODE>>":        "
++
++".join(code_block_parts),
+         }
+         for k,v in replacements.items():
+             tmpl = tmpl.replace(k, v)
+@@ -1681,21 +1687,33 @@ You are a helpful biomedical assistant assigned with the task of problem-solving
+ To achieve this, you will be using an interactive coding environment equipped with a variety of tool functions, data, and softwares to assist you throughout the process.
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Always show the updated plan after each step so the user can track progress.
+ 
+@@ -1710,6 +1728,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -2076,21 +2097,33 @@ To problem solve, you will need to create a high-level and well orchestrated pla
+ You are the planning agent. Your responsibility is to carefully analyze the user’s query, break it down into structured goals, and design a step-by-step plan for how to solve it. You do not execute or code yet — only plan.  
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Rules:
+ - Do not retrieve, run code, or output results.  
+@@ -2786,6 +2819,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -3567,8 +3603,12 @@ In each response, you must include EITHER <goplan>, <goexecute>, or <goshare> ta
+         prompt = (
+             "You're compressing chat history into a handoff note.\n"
+             "Maintain: goals, decisions, data/files touched, tools used, errors+fixes, next intent.\n"
+-            "Keep ≤ 12 bullets. Update the previous summary instead of repeating it.\n\n"
+-            f"PREVIOUS SUMMARY:\n{prev_summary}\n\nRECENT:\n" + "\n".join(recent)
++            "Keep ≤ 12 bullets. Update the previous summary instead of repeating it.
++
++"
++            f"PREVIOUS SUMMARY:\n{prev_summary}
++
++RECENT:\n" + "\n".join(recent)
+         )
+         out = llm.invoke([HumanMessage(content=prompt)])
+         new_summary = (getattr(out, "content", str(out)) or "").strip()
+@@ -4139,7 +4179,9 @@ IMPORTANT:
+                 caption = rec.get("caption", "")
+                 fig_md_lines.append(f'![{label}: {caption}]({rel})')
+ 
+-            figures_md = "\n\n".join(fig_md_lines)
++            figures_md = "
++
++".join(fig_md_lines)
+ 
+             # Inject before End matter if available; else append at end
+             if figures_md:
+@@ -4150,7 +4192,9 @@ IMPORTANT:
+                     idx = m_anchor.start()
+                     paper_text = paper_text[:idx] + f"\nFigures\n-------\n{figures_md}\n" + paper_text[idx:]
+                 else:
+-                    paper_text += f"\n\nFigures\n-------\n{figures_md}\n"
++                    paper_text += f"
++
++Figures\n-------\n{figures_md}\n"
+ 
+             # new
+             # --- Ensure artifacts dict exists
+@@ -4187,7 +4231,9 @@ IMPORTANT:
+ 
+             # --- Append a Code Appendix to the paper (before End matter if possible)
+             code_list_md = "\n".join(f"- `{p}`" for p in rel_code_paths) or "_(No <execute> blocks found)_"
+-            code_appendix = f"\n\nCode Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
++            code_appendix = f"
++
++Code Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
+ 
+             m_anchor = re.search(r"\n\s*End matter\b", paper_text, flags=re.IGNORECASE)
+             if m_anchor:
+@@ -4228,7 +4274,9 @@ IMPORTANT:
+                 f.write(paper_text)
+ 
+             with open(log_path_txt, "a", encoding="utf-8") as f:
+-                f.write(f"\n\n===== SHARE @ {ts} =====\n")
++                f.write(f"
++
++===== SHARE @ {ts} =====\n")
+                 f.write(conversation_blob)
+ 
+             # Also persist any extracted <solution> as a compact note (optional)
+@@ -4311,13 +4359,19 @@ IMPORTANT:
+                     code_lines.append("No code excerpts selected.")
+ 
+                 Path(content_tex).write_text(
+-                    "\n\n".join([
++                    "
++
++".join([
+                         sec("Introduction", fields.get("introduction","")),
+                         sec("Methods",      fields.get("methods","")),
+                         sec("Results",      fields.get("results","")),
+                         sec("Discussion",   fields.get("discussion","")),
+-                        "\\section{Figures}\n" + "\n\n".join(fig_lines),
+-                        "\\section{Code Excerpts}\n" + "\n\n".join(code_lines),
++                        "\\section{Figures}\n" + "
++
++".join(fig_lines),
++                        "\\section{Code Excerpts}\n" + "
++
++".join(code_lines),
+                         "\\section{References}\n" + self._escape_tex(fields.get("references","")),
+                     ]),
+                     encoding="utf-8"
+diff --git a/bioplease/agent/claude_a1.py b/bioplease/agent/claude_a1.py
+index 08f38aa..461d616 100644
+--- a/bioplease/agent/claude_a1.py
++++ b/bioplease/agent/claude_a1.py
+@@ -63,7 +63,9 @@ def log_llm_event(tag: str, content) -> None:
+     text = _msgs_to_text(content).strip()
+     with open(LOG_FILE, "a", encoding="utf-8") as f:
+         f.write(f"{tag}:\n")
+-        f.write(text + "\n\n")
++        f.write(text + "
++
++")
+ 
+ class AgentState(TypedDict):
+     messages: list[BaseMessage]
+@@ -671,8 +673,12 @@ class A1:
+             "<<RESULTS>>":     self._escape_tex(fields["results"]),
+             "<<DISCUSSION>>":  self._escape_tex(fields["discussion"]),
+             "<<REFERENCES>>":  self._escape_tex(fields["references"]),
+-            "<<FIGURES>>":     "\n\n".join(figs_block),
+-            "<<CODE>>":        "\n\n".join(code_block_parts),
++            "<<FIGURES>>":     "
++
++".join(figs_block),
++            "<<CODE>>":        "
++
++".join(code_block_parts),
+         }
+         for k,v in replacements.items():
+             tmpl = tmpl.replace(k, v)
+@@ -1623,21 +1629,33 @@ You are a helpful biomedical assistant assigned with the task of problem-solving
+ To achieve this, you will be using an interactive coding environment equipped with a variety of tool functions, data, and softwares to assist you throughout the process.
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Always show the updated plan after each step so the user can track progress.
+ 
+@@ -1652,6 +1670,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -2004,21 +2025,33 @@ To problem solve, you will need to create a high-level and well orchestrated pla
+ You are the planning agent. Your responsibility is to carefully analyze the user’s query, break it down into structured goals, and design a step-by-step plan for how to solve it. You do not execute or code yet — only plan.  
+ 
+ Given a task, make a plan first. The plan should be a numbered list of steps that you will take to solve the task. Be specific and detailed.
+-Format your plan as a checklist with empty checkboxes like this:
+-1. [ ] First step
+-2. [ ] Second step
+-3. [ ] Third step
+ 
+-Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox with a checkmark:
+-1. [✓] First step (completed)
+-2. [ ] Second step
+-3. [ ] Third step
++CRITICAL FORMATTING RULE: You must maintain a "=== GLOBAL PLAN ===" that persists throughout the entire run. If execution fails, DO NOT replace the plan with a short debugging checklist; instead, add indented sub-tasks.
++
++Format your plan as a checklist with empty checkboxes like this:
+ 
+-If a step fails or needs modification, mark it with an X and explain why:
+-1. [✓] First step (completed)
+-2. [✗] Second step (failed because...)
+-3. [ ] Modified second step
+-4. [ ] Third step
++=== GLOBAL PLAN ===
++1. [ ] Phase 1: High-level goal (e.g. Data Gathering)
++   - [ ] Specific sub-task
++2. [ ] Phase 2: High-level goal (e.g. Model Training)
++3. [ ] Phase 3: High-level goal (e.g. Evaluation)
++===================
++
++Follow the plan step by step. After completing each step, update the checklist by replacing the empty checkbox:
++=== GLOBAL PLAN ===
++1. [✓] Phase 1: High-level goal (completed)
++2. [ ] Phase 2: High-level goal (current)
++   - [ ] New active sub-task
++3. [ ] Phase 3: High-level goal
++===================
++
++If a step fails or needs modification, mark it with an X, explain why, AND KEEP ALL FUTURE PHASES IN THE LIST:
++=== GLOBAL PLAN ===
++1. [✗] Phase 1: High-level goal (failed due to missing file)
++   - [ ] MICRO-STEP: Write script to download missing file
++2. [ ] Phase 2: High-level goal
++3. [ ] Phase 3: High-level goal
++===================
+ 
+ Rules:
+ - Do not retrieve, run code, or output results.  
+@@ -2712,6 +2745,9 @@ After that, you have two options:
+ 
+ 2) When you think it is ready, directly provide a solution that adheres to the required format for the given task to the user. Your solution should be enclosed using "<solution>" tag, for example: The answer is <solution> A </solution>. IMPORTANT: You must end the solution block with </solution> tag.
+ 
++
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
++
+ You have many chances to interact with the environment to receive the observation. So you can decompose your code into multiple steps.
+ Don't overcomplicate the code. Keep it simple and easy to understand.
+ When writing the code, please print out the steps and results in a clear and concise manner, like a research log.
+@@ -4217,7 +4253,9 @@ IMPORTANT:
+                 caption = rec.get("caption", "")
+                 fig_md_lines.append(f'![{label}: {caption}]({rel})')
+ 
+-            figures_md = "\n\n".join(fig_md_lines)
++            figures_md = "
++
++".join(fig_md_lines)
+ 
+             # Inject before End matter if available; else append at end
+             if figures_md:
+@@ -4228,7 +4266,9 @@ IMPORTANT:
+                     idx = m_anchor.start()
+                     paper_text = paper_text[:idx] + f"\nFigures\n-------\n{figures_md}\n" + paper_text[idx:]
+                 else:
+-                    paper_text += f"\n\nFigures\n-------\n{figures_md}\n"
++                    paper_text += f"
++
++Figures\n-------\n{figures_md}\n"
+ 
+             # new
+             # --- Ensure artifacts dict exists
+@@ -4265,7 +4305,9 @@ IMPORTANT:
+ 
+             # --- Append a Code Appendix to the paper (before End matter if possible)
+             code_list_md = "\n".join(f"- `{p}`" for p in rel_code_paths) or "_(No <execute> blocks found)_"
+-            code_appendix = f"\n\nCode Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
++            code_appendix = f"
++
++Code Appendix\n-------------\nSaved code blocks:\n{code_list_md}\n"
+ 
+             m_anchor = re.search(r"\n\s*End matter\b", paper_text, flags=re.IGNORECASE)
+             if m_anchor:
+@@ -4306,7 +4348,9 @@ IMPORTANT:
+                 f.write(paper_text)
+ 
+             with open(log_path_txt, "a", encoding="utf-8") as f:
+-                f.write(f"\n\n===== SHARE @ {ts} =====\n")
++                f.write(f"
++
++===== SHARE @ {ts} =====\n")
+                 f.write(conversation_blob)
+ 
+             # Also persist any extracted <solution> as a compact note (optional)
+@@ -4389,13 +4433,19 @@ IMPORTANT:
+                     code_lines.append("No code excerpts selected.")
+ 
+                 Path(content_tex).write_text(
+-                    "\n\n".join([
++                    "
++
++".join([
+                         sec("Introduction", fields.get("introduction","")),
+                         sec("Methods",      fields.get("methods","")),
+                         sec("Results",      fields.get("results","")),
+                         sec("Discussion",   fields.get("discussion","")),
+-                        "\\section{Figures}\n" + "\n\n".join(fig_lines),
+-                        "\\section{Code Excerpts}\n" + "\n\n".join(code_lines),
++                        "\\section{Figures}\n" + "
++
++".join(fig_lines),
++                        "\\section{Code Excerpts}\n" + "
++
++".join(code_lines),
+                         "\\section{References}\n" + self._escape_tex(fields.get("references","")),
+                     ]),
+                     encoding="utf-8"
+diff --git a/bioplease/agent/communication_hub.py b/bioplease/agent/communication_hub.py
+index 2e49263..7e1cce8 100644
+--- a/bioplease/agent/communication_hub.py
++++ b/bioplease/agent/communication_hub.py
+@@ -382,7 +382,9 @@ class CommunicationHub:
+         for participant in participants:
+             self.send_message(
+                 sender=organizer,
+-                content=f"Meeting invitation: {topic}\n\n{description}",
++                content=f"Meeting invitation: {topic}
++
++{description}",
+                 message_type=MessageType.MEETING_INVITE,
+                 recipients=[participant],
+                 metadata={
+diff --git a/bioplease/agent/env_collection.py b/bioplease/agent/env_collection.py
+index 2621d9a..2a88c25 100644
+--- a/bioplease/agent/env_collection.py
++++ b/bioplease/agent/env_collection.py
+@@ -148,7 +148,9 @@ Respond with only a valid JSON object containing the three lists described above
+             chunk_size=self.chunk_size,
+             chunk_overlap=self.chunk_overlap,
+             length_function=len,
+-            separators=["\n\n", "\n", ". ", " ", ""],
++            separators=["
++
++", "\n", ". ", " ", ""],
+         )
+         chunks = text_splitter.split_text(paper_text)
+ 
+@@ -188,7 +190,11 @@ Respond with only a valid JSON object containing the three lists described above
+ 
+         """
+         # Combine all chunk results
+-        all_tasks = "\n\n===== CHUNK SEPARATOR =====\n\n".join(chunk_results)
++        all_tasks = "
++
++===== CHUNK SEPARATOR =====
++
++".join(chunk_results)
+ 
+         # Use the consolidation prompt to merge and organize tasks
+         prompt = self.consolidation_prompt.format(task_lists=all_tasks)
+diff --git a/bioplease/agent/meeting.py b/bioplease/agent/meeting.py
+index 6353e4a..6ea0a18 100644
+--- a/bioplease/agent/meeting.py
++++ b/bioplease/agent/meeting.py
+@@ -372,7 +372,9 @@ Be concise (2-3 paragraphs) and actionable.""")
+ 
+                         # Add previous responses from this round for context
+                         if prompt_responses:
+-                            prev_summary = "\n\n".join([
++                            prev_summary = "
++
++".join([
+                                 f"{self.personas[pid].name}: {resp}"
+                                 for pid, resp in prompt_responses.items()
+                             ])
+@@ -395,7 +397,9 @@ Be concise (2-3 paragraphs) and actionable.""")
+                             # Send message in meeting
+                             meeting.send_message(
+                                 sender=participant_id,
+-                                content=f"Re: {prompt}\n\n{response_text}",
++                                content=f"Re: {prompt}
++
++{response_text}",
+                                 metadata={
+                                     "round": round_num + 1,
+                                     "prompt": prompt
+@@ -424,11 +428,15 @@ Be concise (2-3 paragraphs) and actionable.""")
+             meeting_summary = meeting.end_meeting()
+ 
+         except KeyboardInterrupt:
+-            print("\n\n⚠️  Meeting interrupted by user (Ctrl+C)")
++            print("
++
++⚠️  Meeting interrupted by user (Ctrl+C)")
+             interrupted = True
+             meeting_summary = "Meeting interrupted before completion"
+         except Exception as e:
+-            print(f"\n\n⚠️  Meeting interrupted by error: {e}")
++            print(f"
++
++⚠️  Meeting interrupted by error: {e}")
+             interrupted = True
+             meeting_summary = f"Meeting interrupted by error: {e}"
+         finally:
+@@ -511,7 +519,9 @@ Be concise (2-3 paragraphs) and actionable.""")
+         if not context_parts:
+             return "No phase logs available yet. This is an initial planning meeting."
+ 
+-        return "\n\n".join(context_parts)
++        return "
++
++".join(context_parts)
+ 
+     def _generate_action_items(
+         self,
+diff --git a/bioplease/agent/phase_logger.py b/bioplease/agent/phase_logger.py
+index 7d7763f..1447268 100644
+--- a/bioplease/agent/phase_logger.py
++++ b/bioplease/agent/phase_logger.py
+@@ -201,7 +201,9 @@ class PhaseLogger:
+                 if metadata:
+                     f.write(f"# Metadata: {json.dumps(metadata)}\n")
+ 
+-                f.write("\n" + "="*80 + "\n\n")
++                f.write("\n" + "="*80 + "
++
++")
+                 f.write(text_content)
+                 f.write("\n")
+         except (IOError, OSError) as e:
+@@ -309,7 +311,9 @@ class PhaseLogger:
+             if metadata:
+                 f.write(f"# Metadata: {json.dumps(metadata)}\n")
+ 
+-            f.write("\n" + "="*80 + "\n\n")
++            f.write("\n" + "="*80 + "
++
++")
+             f.write(text_content)
+             f.write("\n")
+ 
+@@ -385,17 +389,23 @@ class PhaseLogger:
+             out.write(f"# Consolidated Log for Phase: {phase}\n")
+             out.write(f"# Generated: {datetime.now().isoformat()}\n")
+             out.write(f"# Total Steps: {len(files)}\n")
+-            out.write("\n" + "="*80 + "\n\n")
++            out.write("\n" + "="*80 + "
++
++")
+ 
+             for file in files:
+                 out.write(f"\n{'#'*80}\n")
+                 out.write(f"# FILE: {file.name}\n")
+-                out.write(f"{'#'*80}\n\n")
++                out.write(f"{'#'*80}
++
++")
+ 
+                 with open(file, "r", encoding="utf-8") as f:
+                     out.write(f.read())
+ 
+-                out.write("\n\n")
++                out.write("
++
++")
+ 
+         return output_file
+ 
+@@ -490,7 +500,9 @@ class PhaseLogger:
+         self.result_log_file.write(f"# RESULT LOG - Step {step_number}\n")
+         self.result_log_file.write(f"# Timestamp: {timestamp}\n")
+         self.result_log_file.write(f"# Phase: {phase}\n")
+-        self.result_log_file.write("\n" + "="*80 + "\n\n")
++        self.result_log_file.write("\n" + "="*80 + "
++
++")
+         self.result_log_file.flush()
+         
+         # Create tee writers (output to both file and console)
+diff --git a/bioplease/agent/please.py b/bioplease/agent/please.py
+index 00df52b..8b14bcf 100644
+--- a/bioplease/agent/please.py
++++ b/bioplease/agent/please.py
+@@ -384,7 +384,9 @@ Return ONLY JSON:
+             "- Were outputs reproducible?",
+             "- What to improve next time?",
+         ]
+-        state.report_md = "\n\n".join(md)
++        state.report_md = "
++
++".join(md)
+ 
+         state.report_json = {
+             "task": state.task,
+diff --git a/bioplease/agent/product_manager.py b/bioplease/agent/product_manager.py
+index 3b0a245..5a02140 100644
+--- a/bioplease/agent/product_manager.py
++++ b/bioplease/agent/product_manager.py
+@@ -1360,7 +1360,9 @@ class ProductManager:
+         text_report_path = output_dir / "progress_report.txt"
+         with open(text_report_path, 'w', encoding='utf-8') as f:
+             f.write(report_data['text_report'])
+-            f.write("\n\n")
++            f.write("
++
++")
+             f.write(report_data['decision_summary'])
+ 
+         report_data['text_report_path'] = str(text_report_path)
+@@ -1957,7 +1959,9 @@ Try asking:
+             
+             # Limit log content to avoid context overflow (last 50KB)
+             if len(log_content) > 50000:
+-                log_content = "...[earlier content truncated]...\n\n" + log_content[-50000:]
++                log_content = "...[earlier content truncated]...
++
++" + log_content[-50000:]
+             
+             # Parse structured information
+             log_info = self.parse_log_content(log_to_analyze)
+@@ -1992,7 +1996,9 @@ Please provide a clear, concise answer based on the log content above. If the lo
+                 return str(response)
+                 
+         except Exception as e:
+-            return f"Error querying LLM: {e}\n\nTry using specific commands like 'search', 'detailed', etc."
++            return f"Error querying LLM: {e}
++
++Try using specific commands like 'search', 'detailed', etc."
+ 
+     def chat(self, message: str = None) -> str:
+         """Interactive chat mode with the PM agent using LLM
+@@ -2031,7 +2037,9 @@ Please provide a clear, concise answer based on the log content above. If the lo
+                 print(f"\nPM: {response}\n")
+                 
+             except KeyboardInterrupt:
+-                print("\n\nChat session ended.")
++                print("
++
++Chat session ended.")
+                 break
+             except Exception as e:
+                 print(f"\nError: {e}\n")
+diff --git a/bioplease/agent/react.py b/bioplease/agent/react.py
+index 132ce43..0883cfd 100644
+--- a/bioplease/agent/react.py
++++ b/bioplease/agent/react.py
+@@ -175,6 +175,8 @@ You have access to two tools:
+ 2) search_google: to search google for information
+ 
+ You can use them to solve the problem.
++n
++IMPORTANT: Before you try to directly read or get a file, you MUST first list the contents of the directory containing that file to see what files are in that directory (e.g. using `ls -la` in Bash or `os.listdir()` in Python).
+             """
+         else:
+             tools = self.tools

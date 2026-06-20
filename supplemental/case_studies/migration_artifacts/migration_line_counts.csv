@@ -1,0 +1,13 @@
+file,old_blob,new_blob_abbrev,old_total_lines,added_lines,removed_lines,expected_new_lines_from_diff,unchanged_old_lines_estimate,old_line_preservation_pct
+bioplease/agent/a1.py,4e753d3,9fa167e,7201,200,78,7323,7123,98.9
+bioplease/agent/a1_langchain.py,9913322,22d8250,5580,98,40,5638,5540,99.3
+bioplease/agent/a1_original_backup.py,019b21c,e93d176,4804,86,36,4854,4768,99.3
+bioplease/agent/a1_preChain.py,b24bed3,99e3ab8,5020,92,38,5074,4982,99.2
+bioplease/agent/claude_a1.py,08f38aa,461d616,5095,86,36,5145,5059,99.3
+bioplease/agent/communication_hub.py,2e49263,7e1cce8,562,3,1,564,561,99.8
+bioplease/agent/env_collection.py,2621d9a,2a88c25,313,8,2,319,311,99.4
+bioplease/agent/meeting.py,6353e4a,6ea0a18,629,15,5,639,624,99.2
+bioplease/agent/phase_logger.py,7d7763f,1447268,535,18,6,547,529,98.9
+bioplease/agent/please.py,00df52b,8b14bcf,417,3,1,419,416,99.8
+bioplease/agent/product_manager.py,3b0a245,5a02140,2184,12,4,2192,2180,99.8
+bioplease/agent/react.py,132ce43,0883cfd,454,2,0,456,454,100.0
