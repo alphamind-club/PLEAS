@@ -26,14 +26,16 @@ Research Task → [Plan] → [Learn] → [Execute] → [Assess] → [Share] → 
               Persistent State + Compressed Trace + Reusable Artifacts
 ```
 
-### Key Results (Preliminary)
+### Key Results
+
+Benchmark scores determined by **blinded multi-judge evaluation** (3 independent LLM judges, 216 API calls, Fleiss' kappa = 0.53):
 
 | Metric | Value |
 |---|---|
 | Force-aligned integration tests | **23/23 pass** (0.95s, zero API calls) |
 | Benchmark score (BioClaw/PLEAS) | **42/48** (87.5%) |
-| Benchmark score (Biomni baseline) | 38/48 (79.2%) |
-| Benchmark score (ChatGPT gpt-5.5-thinking-extended) | 28/48 (58.3%) |
+| Benchmark score (BioPLEAS baseline) | 39/48 (81.2%) |
+| Benchmark score (GPT-5.5-thinking-extended) | 31/48 (64.6%) |
 | Token reduction (single-run) | **76.1% fewer** input tokens |
 | Cost reduction (single-run) | **79.3% lower** cost |
 
@@ -44,38 +46,37 @@ Research Task → [Plan] → [Learn] → [Execute] → [Assess] → [Share] → 
 ```
 PLEAS/
 ├── engines/
-│   ├── biomni/           # PLEAS on Biomni (Python) — Section IV-A
+│   ├── biopleas/         # BioPLEAS on Biomni (Python) — Section IV-A
 │   └── bioclaw/          # BioClaw on OpenClaude (TypeScript + Python) — Section IV-B
 │
-├── benchmark/            # 24-task biomedical scientific workflow benchmark — Section V-B
-│   ├── tasks/            # Task definitions and rubric
-│   ├── results/          # Raw outputs from all three systems
-│   └── scoring/          # Blinded multi-judge scoring pipeline
-│
-├── tests/                # Force-aligned integration tests (IT-F suite) — Section V-A
-│
-├── supplemental/         # Token analysis, cost data, case studies — Sections V-C, V-E
-│   ├── token_analysis/   # Call-by-call token counts, ablation table
-│   ├── cost_analysis/    # Cost tracking data
-│   ├── case_studies/     # ICER health-economics case study
-│   ├── langgraph_probe/  # LangGraph portability middleware — Section IV-C
-│   └── figures/          # Publication figures
-│
-└── examples/             # Usage examples and demos
+└── case_studies/         # All benchmark data, results, and supplemental materials
+    ├── tasks/            # 24-task benchmark definitions — Section V-B
+    ├── results/          # Raw outputs from all three systems
+    ├── scoring/          # Blinded multi-judge scoring pipeline and results
+    ├── token_analysis/   # Call-by-call token counts, ablation table — Section V-C
+    ├── cost_analysis/    # Cost tracking data — Section V-E
+    ├── figures/          # Publication figures
+    ├── framework_code/   # Reference framework snapshots
+    ├── migration_artifacts/  # Migration diffs and analysis
+    ├── phase_prompt_templates/  # Phase prompt templates
+    ├── state_schema/     # State schema analysis
+    ├── langgraph_probe/  # LangGraph portability middleware — Section IV-C
+    ├── test_it_forces.py           # Force-aligned integration tests (IT-F suite) — Section V-A
+    └── trigger_force_violations.py # Force violation demonstrations
 ```
 
 ---
 
 ## Quick Start
 
-### Biomni Engine (Python)
+### BioPLEAS Engine (Python)
 
-The Biomni engine is a Python-native PLEAS implementation with Pydantic-typed tool schemas and a rich biomedical tool registry.
+The BioPLEAS engine is a Python-native PLEAS implementation with Pydantic-typed tool schemas and a rich biomedical tool registry.
 
 ```bash
 # Clone and install
 git clone https://github.com/alphamind-club/PLEAS.git
-cd PLEAS/engines/biomni
+cd PLEAS/engines/biopleas
 
 # Create environment (Python >= 3.11)
 python -m venv .venv
@@ -92,7 +93,7 @@ cp .env.example .env
 # Edit .env with your API keys (Anthropic, OpenAI, and/or Google)
 
 # Run the force-aligned integration tests (zero API calls needed)
-cd ../../tests
+cd ../../case_studies
 pytest test_it_forces.py -v
 ```
 
@@ -133,7 +134,7 @@ See `engines/bioclaw/docs/` for platform-specific setup guides:
 These 23 tests validate all five structural forces with zero API calls:
 
 ```bash
-cd tests
+cd case_studies
 pytest test_it_forces.py -v
 ```
 
@@ -141,10 +142,10 @@ Expected output: `23 passed in < 1 second`
 
 ### 2. Run the 24-Task Biomedical Benchmark (Section V-B)
 
-The benchmark tasks, rubric, and raw system outputs are in `benchmark/`. To run the blinded scoring pipeline:
+The benchmark tasks, rubric, and raw system outputs are in `case_studies/`. To run the blinded scoring pipeline:
 
 ```bash
-cd benchmark/scoring
+cd case_studies/scoring
 
 # Install scoring dependencies
 pip install -r requirements.txt
@@ -152,26 +153,34 @@ pip install -r requirements.txt
 # Dry run (no API calls — generates blinding manifest only)
 python run_blinded_scoring.py --dry-run
 
-# Full scoring run (requires OpenAI, Anthropic, and Google API keys)
+# Full scoring run (requires Anthropic and Google API keys)
 python run_blinded_scoring.py
 ```
 
 The scoring pipeline:
-1. Loads system answers from three systems
+1. Loads system answers from three systems (BioClaw, BioPLEAS, GPT-5.5-thinking-extended)
 2. Blinds responses using HMAC-SHA256 (scrubs system-identifying names)
-3. Sends blinded responses to three independent LLM judges
-4. Aggregates scores with inter-rater reliability statistics (Fleiss' kappa, Krippendorff's alpha)
+3. Sends blinded responses to three independent LLM judges (Claude Opus 4.8, Claude Sonnet 4.6, Gemini 2.5 Pro)
+4. Aggregates scores with inter-rater reliability statistics (Fleiss' kappa = 0.53, Krippendorff's alpha = 0.11)
+
+Pre-computed results from the blinded evaluation (216 judge calls) are in `case_studies/scoring/results/`:
+- `scoring_report.txt` — Human-readable summary
+- `blinded_task_scores.csv` — Per-task, per-judge scores (72 rows)
+- `blinded_system_summary.csv` — System-level aggregates with category breakdowns
+- `inter_rater_reliability.json` — Fleiss' kappa and Krippendorff's alpha
+- `judge_rationales.json` — Full rationale text from each judge
+- `blinding_manifest.json` — Sealed session mapping for de-anonymization
 
 ### 3. Token Efficiency Analysis (Section V-C)
 
-Raw token count data and ablation results are in `supplemental/token_analysis/`:
+Raw token count data and ablation results are in `case_studies/token_analysis/`:
 - `raw_token_counts_from_logs.csv` — Call-by-call token counts
 - `ablation_table.csv` — Per-force ablation results
 - `C1_token_reduction_summary.csv` — Summary statistics
 
 ### 4. Health-Economics Case Study (Section V-E)
 
-The ICER case study trace and calculator template are in `supplemental/case_studies/`.
+The ICER case study trace and calculator template are in `case_studies/`.
 
 ---
 
@@ -203,7 +212,7 @@ PLEAS defines three substrate-compliance invariants:
 - **P2 (Composability):** Any phase may be substituted without altering adjacent contracts
 - **P3 (Domain-Extensibility):** Domain-specific tools injected at Execute without modifying the orchestrator
 
-This repo demonstrates P1 with two production substrates (Biomni, BioClaw) and a preliminary LangGraph probe.
+This repo demonstrates P1 with two production substrates (BioPLEAS, BioClaw) and a preliminary LangGraph probe.
 
 ---
 

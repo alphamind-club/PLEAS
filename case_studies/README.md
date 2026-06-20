@@ -1,18 +1,30 @@
-# 24-Task Biomedical Scientific Workflow Benchmark
+# Case Studies & Benchmark Data
 
-This benchmark (Section V-B of the paper) evaluates scientific AI workflow agents across six biomedical categories using a 0/1/2 rubric.
+This directory consolidates all benchmark data, scoring results, and supplemental materials for the IEEE IRI 2026 paper.
 
-## Categories (4 tasks each, max 8 points per category)
+## 24-Task Biomedical Benchmark (Section V-B)
 
-| Category | BioClaw (PLEAS) | Biomni (baseline) | ChatGPT |
+Scores determined by **blinded multi-judge evaluation** — 3 independent LLM judges (Claude Opus 4.8, Claude Sonnet 4.6, Gemini 2.5 Pro), 216 total API calls, majority-vote aggregation.
+
+### Per-Category Breakdown
+
+| Category | BioClaw (PLEAS) | BioPLEAS (baseline) | GPT-5.5 |
 |---|---|---|---|
-| Sequence & Variant Analysis | 7/8 (88%) | 7/8 (88%) | 5/8 (62%) |
-| Drug-Target Discovery | 8/8 (100%) | 7/8 (88%) | 5/8 (62%) |
-| Literature & Clinical Mining | 3/8 (38%) | 6/8 (75%) | 3/8 (38%) |
-| Transcriptomics & Single-Cell | 8/8 (100%) | 6/8 (75%) | 3/8 (38%) |
+| Sequence & Variant Analysis | 7/8 (88%) | 6/8 (75%) | 7/8 (88%) |
+| Drug-Target Discovery | 6/8 (75%) | 6/8 (75%) | 4/8 (50%) |
+| Literature & Clinical Mining | 6/8 (75%) | 8/8 (100%) | 6/8 (75%) |
+| Transcriptomics & Single-Cell | 7/8 (88%) | 6/8 (75%) | 2/8 (25%) |
 | Structural & Protein Biology | 8/8 (100%) | 7/8 (88%) | 7/8 (88%) |
-| Pathway & Systems Biology | 8/8 (100%) | 6/8 (75%) | 4/8 (50%) |
-| **Total** | **42/48 (87.5%)** | **38/48 (79.2%)** | **28/48 (58.3%)** |
+| Pathway & Systems Biology | 8/8 (100%) | 6/8 (75%) | 5/8 (62%) |
+| **Total** | **42/48 (87.5%)** | **39/48 (81.2%)** | **31/48 (64.6%)** |
+
+### Inter-Rater Reliability
+
+| Metric | Value |
+|---|---|
+| Fleiss' kappa | 0.5319 |
+| Krippendorff's alpha | 0.1128 |
+| Judge agreement | Moderate (kappa 0.41–0.60) |
 
 ## Rubric
 
@@ -29,17 +41,34 @@ This benchmark (Section V-B of the paper) evaluates scientific AI workflow agent
 ## Directory Structure
 
 ```
-benchmark/
-├── tasks/          # Task definitions with expected outputs
-├── results/        # Raw outputs from all three systems + scoring CSVs
-└── scoring/        # Blinded multi-judge scoring pipeline
-    ├── rubric.py               # 24-task rubric definitions
-    ├── blinding.py             # HMAC-SHA256 cryptographic blinding
-    ├── judges.py               # Multi-model judge interface
-    ├── aggregator.py           # Score aggregation + inter-rater reliability
-    ├── run_blinded_scoring.py  # CLI entry point
-    ├── test_blinding.py        # Offline test suite
-    └── config.py               # Judge panel configuration
+case_studies/
+├── tasks/                  # 24-task definitions with expected outputs
+├── results/                # Raw outputs from all three systems
+├── scoring/                # Blinded multi-judge scoring pipeline
+│   ├── rubric.py           # 24-task rubric definitions
+│   ├── blinding.py         # HMAC-SHA256 cryptographic blinding
+│   ├── judges.py           # Multi-model judge interface
+│   ├── aggregator.py       # Score aggregation + inter-rater reliability
+│   ├── run_blinded_scoring.py  # CLI entry point
+│   ├── config.py           # Judge panel configuration
+│   ├── model_answers/      # System answer files (BioClaw, BioPLEAS, GPT)
+│   └── results/            # Pre-computed blinded scoring results
+│       ├── scoring_report.txt          # Human-readable summary
+│       ├── blinded_task_scores.csv     # Per-task, per-judge scores (72 rows)
+│       ├── blinded_system_summary.csv  # System-level aggregates
+│       ├── inter_rater_reliability.json
+│       ├── judge_rationales.json       # Full rationale text from each judge
+│       └── blinding_manifest.json      # Sealed de-anonymization mapping
+├── token_analysis/         # Call-by-call token counts, ablation table
+├── cost_analysis/          # Cost tracking data
+├── figures/                # Publication figures
+├── framework_code/         # Reference framework snapshots
+├── migration_artifacts/    # Migration diffs and analysis
+├── phase_prompt_templates/ # Phase prompt templates
+├── state_schema/           # State schema analysis
+├── langgraph_probe/        # LangGraph portability middleware
+├── test_it_forces.py       # 23 force-aligned integration tests (F1–F5)
+└── trigger_force_violations.py  # Force violation demonstrations
 ```
 
 ## Running the Scoring Pipeline
@@ -54,10 +83,9 @@ python run_blinded_scoring.py --dry-run
 
 ### Full Scoring Run
 
-Requires API keys for three judge models (OpenAI, Anthropic, Google):
+Requires API keys for the three judge models:
 
 ```bash
-export OPENAI_API_KEY=...
 export ANTHROPIC_API_KEY=...
 export GOOGLE_API_KEY=...
 
@@ -73,11 +101,6 @@ pytest test_blinding.py -v
 ## Scoring Methodology
 
 1. **Blinding:** Responses are anonymized using HMAC-SHA256 with a session-seeded key. System-identifying names are scrubbed via regex.
-2. **Independent Judging:** Three frontier LLMs (GPT-5.5-thinking-extended, Claude Opus 4.8, Gemini 3.1 Pro) independently score each blinded response.
+2. **Independent Judging:** Three frontier LLMs (Claude Opus 4.8, Claude Sonnet 4.6, Gemini 2.5 Pro) independently score each blinded response against the rubric.
 3. **Aggregation:** Majority-vote and mean scores are computed per task and per system. Inter-rater reliability is measured via Fleiss' kappa and Krippendorff's alpha.
-
-## Limitations
-
-- Scoring was non-blinded in the original paper (GPT-5.5-thinking-extended only)
-- The blinded multi-judge pipeline in `scoring/` is the improved version
-- ChatGPT comparator uses the same model family as the original judge (disclosed confound)
+4. **Transparency:** Full judge rationales and the sealed blinding manifest are included for reproducibility.
