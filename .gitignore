@@ -42,6 +42,11 @@ bun.lock
 htmlcov/
 .coverage
 
+# Paper files
+*.docx
+paper_*
+update_paper*
+
 # BioPLEASE runtime
 .bioplease/
 state.json
