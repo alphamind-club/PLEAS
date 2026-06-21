@@ -34,10 +34,10 @@ Benchmark scores determined by **blinded multi-judge evaluation** (3 independent
 |---|---|
 | Force-aligned integration tests | **23/23 pass** (0.95s, zero API calls) |
 | Benchmark score (BioClaw/PLEAS) | **42/48** (87.5%) |
-| Benchmark score (BioPLEAS baseline) | 39/48 (81.2%) |
+| Benchmark score (non-PLEAS baseline) | 39/48 (81.2%) |
 | Benchmark score (GPT-5.5-thinking-extended) | 31/48 (64.6%) |
-| Token reduction (single-run) | **76.1% fewer** input tokens |
-| Cost reduction (single-run) | **79.3% lower** cost |
+| Token reduction (single-run) | **65.4% fewer** input tokens (avg 35,935 vs 103,830/call) |
+| Cost reduction (single-run) | **62.3% lower** cost |
 
 ---
 
