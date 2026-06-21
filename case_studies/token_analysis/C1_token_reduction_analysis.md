@@ -27,9 +27,9 @@ Paper-ready wording:
 > In screenshot-derived call logs, BioPLEASE reduced average input context from
 > 103,830.4 to 35,934.7 tokens per call, a 65.4% descriptive reduction.
 
-Note: unlike the baseline which decreases over time (195K → 24K as tasks
-complete), BioPLEASE increases over time (20K → 52K) but at a much lower
-absolute level, indicating that phase isolation bounds context growth rate
+Note: both conditions increase over time as context accumulates. The baseline
+grows rapidly (24K → 195K) while BioPLEASE grows slowly (20K → 52K),
+indicating that phase isolation and trace compression bound the growth rate
 even though some accumulation still occurs.
 
 Do not cite Wilcoxon significance, paired task-level statistics, or a 12-task

@@ -16,8 +16,8 @@ plt.rcParams.update({
     "figure.dpi": 300,
 })
 
-baseline = [195498, 169117, 151694, 144429, 138003, 130879, 123906, 113217,
-            106071, 98577, 91642, 83565, 75242, 67563, 57984, 51614, 46355, 23591]
+baseline = [23591, 46355, 51614, 57984, 67563, 75242, 83565, 91642,
+            98577, 106071, 113217, 123906, 130879, 138003, 144429, 151694, 169117, 195498]
 
 biopleas = [19896, 22101, 24572, 26506, 28722, 30262, 32009, 33782,
             35821, 37029, 38754, 40504, 41687, 43176, 44624, 46555, 48980, 51845]
@@ -52,7 +52,7 @@ ax.text(18.3, bp_avg, f"avg {bp_avg:.0f}K", fontsize=7, color="#1b5e20", va="cen
 fig.text(
     0.5, -0.02,
     "Fig. 4.  Call-by-call input token counts.\n"
-    "Baseline context accumulates over calls; BioPLEAS grows more slowly under phase isolation and trace compression.",
+    "Both conditions increase over time; baseline context grows rapidly while BioPLEAS grows slowly under phase isolation and trace compression.",
     ha="center", va="top", fontsize=8, style="italic", color="#333333",
 )
 
