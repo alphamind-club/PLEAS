@@ -34,9 +34,9 @@ Scores determined by **blinded multi-judge evaluation** — 3 independent LLM ju
 
 ## Difficulty Distribution
 
-- Easy: 6 tasks
-- Medium: 12 tasks
-- Hard: 6 tasks
+- Easy: 11 tasks
+- Medium: 9 tasks
+- Hard: 4 tasks
 
 ## Directory Structure
 
