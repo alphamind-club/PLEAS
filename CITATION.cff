@@ -11,7 +11,7 @@ authors:
     given-names: "Jake Y."
     affiliation: "University of Alabama at Birmingham"
     email: jakechen@uab.edu
-license: Apache-2.0
+license: MIT
 repository-code: "https://github.com/alphamind-club/PLEAS"
 keywords:
   - artificial intelligence
