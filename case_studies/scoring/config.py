@@ -35,17 +35,6 @@ class JudgeModel:
 
 JUDGE_PANEL: list[JudgeModel] = [
     JudgeModel(
-        judge_id="gpt55-thinking",
-        provider="openai",
-        model_id="gpt-5.5-thinking-extended",
-        api_key_env="OPENAI_API_KEY",
-        extra_params={
-            "reasoning_effort": "high",
-            "temperature": 0.0,
-            "max_completion_tokens": 16_384,
-        },
-    ),
-    JudgeModel(
         judge_id="claude-opus-48",
         provider="anthropic",
         model_id="claude-opus-4-8",
@@ -59,9 +48,22 @@ JUDGE_PANEL: list[JudgeModel] = [
         },
     ),
     JudgeModel(
-        judge_id="gemini-31",
+        judge_id="claude-sonnet-46",
+        provider="anthropic",
+        model_id="claude-sonnet-4-6",
+        api_key_env="ANTHROPIC_API_KEY",
+        extra_params={
+            "max_tokens": 16_384,
+            "thinking": {
+                "type": "enabled",
+                "budget_tokens": 10_000,
+            },
+        },
+    ),
+    JudgeModel(
+        judge_id="gemini-25-pro",
         provider="google",
-        model_id="gemini-3.1-pro",
+        model_id="gemini-2.5-pro",
         api_key_env="GOOGLE_API_KEY",
         extra_params={
             "temperature": 0.0,

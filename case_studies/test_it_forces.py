@@ -1,7 +1,7 @@
 """
 IT-F Integration Tests — BioPLEASE Structural Forces F1–F5
 ===========================================================
-18 tests, zero API calls, no conda environment needed.
+23 tests, zero API calls, no conda environment needed.
 
 Run from the BioPlease repo root:
 
